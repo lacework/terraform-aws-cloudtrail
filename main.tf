@@ -25,6 +25,7 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   s3_bucket_name        = local.bucket_name
   kms_key_id            = var.bucket_sse_key_arn
   sns_topic_name        = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
+  tags                  = var.tags
   depends_on            = [aws_s3_bucket.cloudtrail_bucket]
 }
 
@@ -57,6 +58,8 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
       }
     }
   }
+
+  tags = var.tags
 }
 
 resource "aws_s3_bucket" "cloudtrail_log_bucket" {
@@ -80,6 +83,8 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
       }
     }
   }
+
+  tags = var.tags
 }
 
 # we need the identity of the caller to get their account_id for the s3 bucket
@@ -140,6 +145,7 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
 
 resource "aws_sns_topic" "lacework_cloudtrail_sns_topic" {
   name = local.sns_topic_name
+  tags = var.tags
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
@@ -163,6 +169,7 @@ resource "aws_sns_topic_policy" "default" {
 
 resource "aws_sqs_queue" "lacework_cloudtrail_sqs_queue" {
   name = local.sqs_queue_name
+  tags = var.tags
 }
 
 resource "aws_sqs_queue_policy" "lacework_sqs_queue_policy" {
@@ -274,11 +281,12 @@ resource "aws_iam_policy" "cross_account_policy" {
 
 module "lacework_ct_iam_role" {
   source                  = "lacework/iam-role/aws"
-  version                 = "~> 0.1"
+  version                 = "~> 0.1.0"
   create                  = var.use_existing_iam_role ? false : true
   iam_role_name           = local.iam_role_name
   lacework_aws_account_id = var.lacework_aws_account_id
   external_id_length      = var.external_id_length
+  tags                    = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "lacework_cross_account_iam_role_policy" {
