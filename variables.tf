@@ -4,6 +4,18 @@ variable "consolidated_trail" {
   description = "Set this to true to configure a consolidated cloudtrail"
 }
 
+variable "org_account_mappings" {
+  type = list(object({
+    default_lacework_account = string
+    mapping = list(object({
+      lacework_account = string
+      aws_accounts     = list(string)
+    }))
+  }))
+  default     = []
+  description = "Mapping of AWS accounts to Lacework accounts within a Lacework organization"
+}
+
 variable "use_existing_iam_role" {
   type        = bool
   default     = false

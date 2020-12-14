@@ -317,5 +317,21 @@ resource "lacework_integration_aws_ct" "default" {
     role_arn    = local.iam_role_arn
     external_id = local.iam_role_external_id
   }
+
+  dynamic "org_account_mappings" {
+    for_each = var.org_account_mappings
+    content {
+      default_lacework_account = org_account_mappings.value["default_lacework_account"]
+
+      dynamic "mapping" {
+        for_each = org_account_mappings.value["mapping"]
+        content {
+          lacework_account = mapping.value["lacework_account"]
+          aws_accounts     = mapping.value["aws_accounts"]
+        }
+      }
+    }
+  }
+
   depends_on = [time_sleep.wait_time]
 }
