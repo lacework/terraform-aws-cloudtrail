@@ -1,6 +1,8 @@
 provider "lacework" {}
 
-provider "aws" {}
+provider "aws" {
+  region = "us-west-2"
+}
 
 module "aws_cloudtrail" {
   source = "../../"
@@ -11,4 +13,3 @@ module "aws_cloudtrail" {
   bucket_name             = "lacework-ct-bucket-8805c0bf"
   sns_topic_name          = "lacework-ct-sns-8805c0bf"
 }
-
