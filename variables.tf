@@ -65,23 +65,27 @@ variable "bucket_arn" {
 }
 
 variable "bucket_enable_encryption" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Set this to `true` to enable encryption on a created S3 bucket"
 }
 
 variable "bucket_enable_logs" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Set this to `true` to enable access logging on a created S3 bucket"
 }
 
 variable "bucket_enable_versioning" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Set this to `true` to enable access versioning on a created S3 bucket"
 }
 
 variable "bucket_force_destroy" {
-  type    = bool
-  default = false
+  type        = bool
+  default     = false
+  description = "Force destroy bucket (Required when bucket not empty)"
 }
 
 variable "bucket_sse_algorithm" {
@@ -97,18 +101,21 @@ variable "bucket_sse_key_arn" {
 }
 
 variable "log_bucket_name" {
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
+  description = "Name of the S3 bucket for access logs"
 }
 
 variable "sns_topic_name" {
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
+  description = "The SNS topic name"
 }
 
 variable "sqs_queue_name" {
-  type    = string
-  default = ""
+  type        = string
+  default     = ""
+  description = "The SQS queue name"
 }
 
 variable "use_existing_cloudtrail" {
@@ -118,8 +125,9 @@ variable "use_existing_cloudtrail" {
 }
 
 variable "cloudtrail_name" {
-  type    = string
-  default = "lacework-cloudtrail"
+  type        = string
+  default     = "lacework-cloudtrail"
+  description = "The name of the CloudTrail"
 }
 
 variable "cross_account_policy_name" {
@@ -134,8 +142,9 @@ variable "sqs_queues" {
 }
 
 variable "lacework_integration_name" {
-  type    = string
-  default = "TF cloudtrail"
+  type        = string
+  default     = "TF cloudtrail"
+  description = "The name of the integration in Lacework."
 }
 
 variable "lacework_aws_account_id" {
