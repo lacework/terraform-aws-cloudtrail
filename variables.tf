@@ -76,6 +76,12 @@ variable "bucket_enable_logs" {
   description = "Set this to `true` to enable access logging on a created S3 bucket"
 }
 
+variable "bucket_enable_mfa_delete" {
+  type        = bool
+  default     = true
+  description = "Set this to `true` to require MFA for object deletion (Requires versioning)"
+}
+
 variable "bucket_enable_versioning" {
   type        = bool
   default     = false

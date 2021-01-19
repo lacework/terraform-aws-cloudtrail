@@ -36,7 +36,8 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   policy        = data.aws_iam_policy_document.cloudtrail_s3_policy.json
 
   versioning {
-    enabled = var.bucket_enable_versioning
+    enabled    = var.bucket_enable_versioning
+    mfa_delete = var.bucket_enable_mfa_delete
   }
 
   dynamic "logging" {
@@ -69,7 +70,8 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
   acl           = "log-delivery-write"
 
   versioning {
-    enabled = var.bucket_enable_versioning
+    enabled    = var.bucket_enable_versioning
+    mfa_delete = var.bucket_enable_mfa_delete
   }
 
   dynamic "server_side_encryption_configuration" {
