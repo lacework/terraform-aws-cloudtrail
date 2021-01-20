@@ -19,14 +19,15 @@ resource "random_id" "uniq" {
 }
 
 resource "aws_cloudtrail" "lacework_cloudtrail" {
-  count                 = var.use_existing_cloudtrail ? 0 : 1
-  name                  = var.cloudtrail_name
-  is_multi_region_trail = true
-  s3_bucket_name        = local.bucket_name
-  kms_key_id            = var.bucket_sse_key_arn
-  sns_topic_name        = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
-  tags                  = var.tags
-  depends_on            = [aws_s3_bucket.cloudtrail_bucket]
+  count                      = var.use_existing_cloudtrail ? 0 : 1
+  name                       = var.cloudtrail_name
+  is_multi_region_trail      = true
+  s3_bucket_name             = local.bucket_name
+  kms_key_id                 = var.bucket_sse_key_arn
+  sns_topic_name             = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
+  tags                       = var.tags
+  enable_log_file_validation = var.enable_log_file_validation
+  depends_on                 = [aws_s3_bucket.cloudtrail_bucket]
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
