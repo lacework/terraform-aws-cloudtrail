@@ -52,6 +52,12 @@ variable "prefix" {
   description = "The prefix that will be use at the beginning of every generated resource"
 }
 
+variable "enable_log_file_validation" {
+  type        = bool
+  default     = false
+  description = "Specifies whether cloudtrail log file integrity validation is enabled"
+}
+
 variable "bucket_name" {
   type        = string
   default     = ""
