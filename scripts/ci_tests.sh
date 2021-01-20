@@ -9,9 +9,12 @@ set -eou pipefail
 readonly project_name=terraform-aws-cloudtrail
 
 TEST_CASES=(
+  examples/complete-cloudtrail-access-logs
+  examples/complete-cloudtrail-versioning
   examples/complete-cloudtrail
   examples/consolidated-cloudtrail-multiple-lacework-tenants
   examples/consolidated-cloudtrail
+  examples/existing-encrypted-cloudtrail
   examples/existing-cloudtrail-iam-role
   examples/existing-cloudtrail
 )
