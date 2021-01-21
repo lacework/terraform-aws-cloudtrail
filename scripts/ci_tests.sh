@@ -17,6 +17,7 @@ TEST_CASES=(
   examples/existing-encrypted-cloudtrail
   examples/existing-cloudtrail-iam-role
   examples/existing-cloudtrail
+  examples/existing-cloudtrail-without-sns-topic
 )
 
 log() {
