@@ -18,7 +18,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | bucket_arn | The S3 bucket ARN is required only when setting `use_existing_cloudtrail` to true | `string` | "" | no |
 | bucket_enable_encryption | Set this to `true` to enable encryption on a created S3 bucket | `bool` | false | no |
 | bucket_enable_logs | Set this to `true` to enable access logging on a created S3 bucket | `bool` | false | no |
-| bucket_enable_mfa_delete | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | true | no |
+| bucket_enable_mfa_delete | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | `false` | no |
 | bucket_enable_versioning | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | false | no |
 | bucket_sse_algorithm | Name of the server-side encryption algorithm to use ("AES256" or "aws:kms") | `string` | AES256 | no |
 | bucket_sse_key_arn | The ARN of the KMS encryption key to be used (Required when using "aws:kms") | `string` | "" | no |
