@@ -12,6 +12,7 @@ locals {
   iam_role_name = var.use_existing_iam_role ? var.iam_role_name : (
     length(var.iam_role_name) > 0 ? var.iam_role_name : "${var.prefix}-iam-${random_id.uniq.hex}"
   )
+  mfa_delete = var.bucket_enable_versioning && var.bucket_enable_mfa_delete
 }
 
 resource "random_id" "uniq" {
@@ -38,7 +39,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
 
   versioning {
     enabled    = var.bucket_enable_versioning
-    mfa_delete = var.bucket_enable_mfa_delete
+    mfa_delete = local.mfa_delete
   }
 
   dynamic "logging" {
@@ -72,7 +73,7 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
 
   versioning {
     enabled    = var.bucket_enable_versioning
-    mfa_delete = var.bucket_enable_mfa_delete
+    mfa_delete = local.mfa_delete
   }
 
   dynamic "server_side_encryption_configuration" {
