@@ -84,7 +84,7 @@ variable "bucket_enable_logs" {
 
 variable "bucket_enable_mfa_delete" {
   type        = bool
-  default     = true
+  default     = false
   description = "Set this to `true` to require MFA for object deletion (Requires versioning)"
 }
 
