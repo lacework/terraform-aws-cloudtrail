@@ -23,7 +23,7 @@ the existing CloudTrail
 SNS delivery notifications manually and point to the generated SNS topic.**
 
 ## Enable SNS delivery notifications manually
-![](../../img/cloudtrail_enable_sns_delivery_notifications.gif)
+![](https://techally-artifacts.s3-us-west-2.amazonaws.com/terraform-module-docs/cloudtrail_enable_sns_delivery_notifications.gif)
 
 ## Enable SNS delivery notifications via Terraform
 
