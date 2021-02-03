@@ -254,27 +254,6 @@ data "aws_iam_policy_document" "cross_account_policy" {
       "sqs:ReceiveMessage"
     ]
   }
-
-  statement {
-    sid       = "Debug"
-    resources = ["*"]
-    actions = [
-      "cloudtrail:DescribeTrails",
-      "cloudtrail:GetTrail",
-      "cloudtrail:GetTrailStatus",
-      "cloudtrail:ListPublicKeys",
-      "s3:GetBucketAcl",
-      "s3:GetBucketPolicy",
-      "s3:ListAllMyBuckets",
-      "s3:GetBucketLocation",
-      "s3:GetBucketLogging",
-      "sns:GetSubscriptionAttributes",
-      "sns:GetTopicAttributes",
-      "sns:ListSubscriptions",
-      "sns:ListSubscriptionsByTopic",
-      "sns:ListTopics"
-    ]
-  }
 }
 
 resource "aws_iam_policy" "cross_account_policy" {
