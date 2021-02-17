@@ -1,11 +1,38 @@
-# Simple CloudTrail Integration
+# Deploy New CloudTrail and Integrate with Lacework
+This example creates a new CloudTrail in an AWS account with all of the required resources, as well as creating an IAM Role with a cross-account policy to provide Lacework read-only access to monitor the trail. 
 
-This example will provision the following resources in the designated AWS account:
+| Name | Description | Type |
+|------|-------------|------|
+| `bucket_enable_encryption` | Set this to `true` to enable encryption on a created S3 bucket | `bool` |
+| `bucket_enable_logs` | Set this to `true` to enable access logging on a created S3 bucket | `bool` 
+| `bucket_enable_versioning` | Set this to `true` to enable access versioning on a created S3 bucket | `bool` |
+| `bucket_force_destroy` | Force destroy bucket (Required when bucket not empty) | `bool` |
+| `enable_log_file_validation` | Set this to `true` to use an existing CloudTrail. | `bool` |
 
-* IAM Cross Account Role - A cross account role is required to give access to Lacework access for analysis of CloudTrail events. The cross account role will be given the following policies:
-  * SecurityAudit - AWS Managed Policy to provide read-only access to cloud resource configurations.
-  * Lacework Custom IAM Policy - A custom policy that provides Lacework read-only access to injest CloudTrail logs.
-* CloudTrail - Lacework can create a new trail or use an existing CloudTrail.
-* S3 Bucket - An S3 bucket is required for all CloudTrail integrations. Lacework can use an existing bucket or create a new bucket in the designated account.
-* SNS Topic - An SNS topic is required for all CloudTrail integrations. Terraform can use an existing SNS topic or create one if an SNS topic has not be added to an existing CloudTrail.
-* SQS Queue - An SQS queue is required for all CloudTrail integrations and monitored by Lacework.
+```
+terraform {
+  required_providers {
+    lacework = {
+      source = "lacework/lacework"
+      version = "~> 0.2.7"
+    }
+  }
+}
+
+provider "aws" {}
+
+provider "lacework" {}
+
+module "aws_cloudtrail" {
+  source  = "lacework/cloudtrail/aws"
+  version = "~> 0.1.3"
+
+  bucket_enable_encryption   = true
+  bucket_enable_logs         = true
+  bucket_enable_versioning   = true
+  bucket_force_destroy       = true
+  enable_log_file_validation = true
+}
+```
+
+For detailed information on integrating Lacework with AWS see [AWS Config and CloudTrail Integration with Terraform](https://support.lacework.com/hc/en-us/articles/360057092034-AWS-Config-and-CloudTrail-Integration-with-Terraform).

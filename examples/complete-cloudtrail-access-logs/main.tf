@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    lacework = {
+      source = "lacework/lacework"
+      version = "~> 0.2.7"
+    }
+  }
+}
+
 provider "lacework" {}
 
 provider "aws" {

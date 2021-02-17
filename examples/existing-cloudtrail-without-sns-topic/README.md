@@ -1,9 +1,8 @@
 # Integrate Existing CloudTrail Without SNS Notifications
 
-In this example we allow users pass an existing CloudTrail that does
-not have SNS notifications enabled. The module will automatically create
-an SNS topic that must be configured into the existing CloudTrail, either
-manually or via your own Terraform code.
+This example integrates an existing CloudTrail with Lacework that does not have SNS notifications enabled. The module will automatically create an SNS topic that must be configured into the existing CloudTrail, either manually or via your own Terraform code.
+
+**IMPORTANT** The new SNS topic must be created in the same region as the existing CloudTrail.
 
 The fields required for this example are:
 
@@ -48,3 +47,5 @@ module "lacework_cloudtrail" {
   bucket_arn              = "bucket ARN from existing cloudtrail"
 }
 ```
+
+For detailed information on integrating Lacework with AWS see [AWS Config and CloudTrail Integration with Terraform](https://support.lacework.com/hc/en-us/articles/360057092034-AWS-Config-and-CloudTrail-Integration-with-Terraform)
