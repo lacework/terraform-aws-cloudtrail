@@ -12,8 +12,7 @@ provider "aws" {}
 provider "lacework" {}
 
 module "aws_cloudtrail" {
-  source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1.3"
+  source = "../../"
 
   enable_log_file_validation = true
   bucket_force_destroy       = true
