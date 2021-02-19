@@ -1,4 +1,6 @@
-provider "aws" {}
+provider "aws" {
+  region = "us-west-2"
+}
 
 provider "lacework" {}
 
@@ -10,5 +12,4 @@ module "aws_cloudtrail" {
   bucket_enable_encryption   = true
   bucket_enable_logs         = true
   bucket_enable_versioning   = true
-  
 }
