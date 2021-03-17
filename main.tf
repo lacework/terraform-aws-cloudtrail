@@ -285,7 +285,7 @@ resource "aws_iam_policy" "cross_account_policy" {
 
 module "lacework_ct_iam_role" {
   source                  = "lacework/iam-role/aws"
-  version                 = "~> 0.1.0"
+  version                 = "~> 0.1"
   create                  = var.use_existing_iam_role ? false : true
   iam_role_name           = local.iam_role_name
   lacework_aws_account_id = var.lacework_aws_account_id
