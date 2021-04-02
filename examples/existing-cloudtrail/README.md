@@ -4,12 +4,13 @@ This example integrates an existing CloudTrail with Lacework and uses an existin
 
 The fields required for this example are:
 
-| Name | Description | Type |
-|------|-------------|------|
-| `use_existing_cloudtrail` | Set this to `true` to use an existing CloudTrail. | `bool` |
-| `bucket_name` | The S3 bucket name configured in the existing CloudTrail. | `string` |
-| `bucket_arn` | The S3 bucket ARN configured in the existing CloudTrail. | `string` |
-| `sns_topic_name` | The SNS topic name configured in the existing CloudTrail. | `string` |
+| Name                      | Description                                               | Type     |
+| ------------------------- | --------------------------------------------------------- | -------- |
+| `use_existing_cloudtrail` | Set this to `true` to use an existing CloudTrail.         | `bool`   |
+| `bucket_arn`              | The S3 bucket ARN configured in the existing CloudTrail.  | `string` |
+| `bucket_name`             | The S3 bucket name configured in the existing CloudTrail. | `string` |
+| `use_existing_sns_topic`  | Set this to `true` to use an existing SNS topic           | `bool`   |
+| `sns_topic_arn`           | The SNS topic ARN configured in the existing CloudTrail.  | `string` |
 
 **IMPORTANT: This example assumes that your CloudTrail is already sending delivery notifications
 to the provided SNS topic. If the existing CloudTrail does NOT have SNS notification enabled,
@@ -30,7 +31,10 @@ module "aws_cloudtrail" {
   use_existing_cloudtrail = true
   bucket_arn              = "arn:aws:s3:::lacework-ct-bucket-8805c0bf"
   bucket_name             = "lacework-ct-bucket-8805c0bf"
-  sns_topic_name          = "lacework-ct-sns-8805c0bf"
+
+  # Use an existing SNS Topic
+  use_existing_sns_topic = true
+  sns_topic_arn          = "arn:aws:sns:us-west-2:713578388890:lacework-ct-sns-8805c0bf"
 }
 ```
 
