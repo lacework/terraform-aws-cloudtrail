@@ -3,6 +3,7 @@ locals {
   bucket_arn      = var.use_existing_cloudtrail ? trimsuffix(var.bucket_arn, "/") : aws_s3_bucket.cloudtrail_bucket[0].arn
   log_bucket_name = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
   sns_topic_name  = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
+  sns_topic_arn   = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
   sqs_queue_name  = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
   cross_account_policy_name = (
     length(var.cross_account_policy_name) > 0 ? var.cross_account_policy_name : "${var.prefix}-cross-acct-policy-${random_id.uniq.hex}"
@@ -25,7 +26,7 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   is_multi_region_trail      = true
   s3_bucket_name             = local.bucket_name
   kms_key_id                 = var.bucket_sse_key_arn
-  sns_topic_name             = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
+  sns_topic_name             = local.sns_topic_arn
   tags                       = var.tags
   enable_log_file_validation = var.enable_log_file_validation
   depends_on                 = [aws_s3_bucket.cloudtrail_bucket]
@@ -148,8 +149,9 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
 }
 
 resource "aws_sns_topic" "lacework_cloudtrail_sns_topic" {
-  name = local.sns_topic_name
-  tags = var.tags
+  count = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
+  name  = local.sns_topic_name
+  tags  = var.tags
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
@@ -157,7 +159,7 @@ data "aws_iam_policy_document" "sns_topic_policy" {
   statement {
     actions   = ["SNS:Publish"]
     sid       = "AWSCloudTrailSNSPolicy20131101"
-    resources = [aws_sns_topic.lacework_cloudtrail_sns_topic.arn]
+    resources = [local.sns_topic_arn]
 
     principals {
       type        = "Service"
@@ -167,7 +169,8 @@ data "aws_iam_policy_document" "sns_topic_policy" {
 }
 
 resource "aws_sns_topic_policy" "default" {
-  arn    = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
+  count  = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
+  arn    = local.sns_topic_arn
   policy = data.aws_iam_policy_document.sns_topic_policy.json
 }
 
@@ -193,7 +196,7 @@ resource "aws_sqs_queue_policy" "lacework_sqs_queue_policy" {
 			"Resource": "${aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn}",
 			"Condition": {
 				"ArnEquals": {
-					"aws:SourceArn": "${aws_sns_topic.lacework_cloudtrail_sns_topic.arn}"
+					"aws:SourceArn": "${local.sns_topic_arn}"
 				}
 			}
 		}
@@ -203,7 +206,7 @@ POLICY
 }
 
 resource "aws_sns_topic_subscription" "lacework_sns_topic_sub" {
-  topic_arn = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
+  topic_arn = local.sns_topic_arn
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn
 }

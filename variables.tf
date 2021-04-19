@@ -118,6 +118,12 @@ variable "log_bucket_name" {
   description = "Name of the S3 bucket for access logs"
 }
 
+variable "sns_topic_arn" {
+  type        = string
+  default     = ""
+  description = "The SNS topic ARN"
+}
+
 variable "sns_topic_name" {
   type        = string
   default     = ""
@@ -134,6 +140,12 @@ variable "use_existing_cloudtrail" {
   type        = bool
   default     = false
   description = "Set this to true to use an existing cloudtrail. Default behavior enables new cloudtrail"
+}
+
+variable "use_existing_sns_topic" {
+  type        = bool
+  default     = false
+  description = "Set this to true to use an existing SNS topic. Default behavior creates a new SNS topic"
 }
 
 variable "cloudtrail_name" {

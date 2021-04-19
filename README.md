@@ -28,13 +28,15 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | lacework_integration_name | The name of the integration in Lacework. | `string` | TF cloudtrail | no |
 | log_bucket_name | Name of the S3 bucket for access logs | `string` | "" | no |
 | prefix | The prefix that will be use at the beginning of every generated resource | `string` | lacework-ct | no |
+| sns_topic_arn | SNS topic ARN. Can be used when using an existing resource. | `string` | "" | no |
 | sns_topic_name | SNS topic name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
 | sqs_queue_name | SQS queue name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
 | sqs_queues | List of SQS queues to configure in the Lacework cross-account policy. | `list(string)` | `[]` | no |
 | consolidated_trail | Set this to `true` to configure a consolidated cloudtrail. | `bool` | `false` | no |
 | org_account_mappings | Mapping of AWS accounts to Lacework accounts within a Lacework organization. | `list(object)` | `[]` | no |
-| use_existing_cloudtrail | Set this to `true` to use an existing cloudtrail. When set to `true` you must provide both the `bucket_name` and `sns_topic_name` | `bool` | `false` | no |
+| use_existing_cloudtrail | Set this to `true` to use an existing cloudtrail. When set to `true` you must provide the `bucket_name` | `bool` | `false` | no |
 | use_existing_iam_role | Set this to `true` to use an existing IAM role. When set to `true` you must provide both the `iam_role_name` and `iam_role_external_id` | `bool` | `false` | no |
+| use_existing_sns_topic | When using an existing CloudTrail, set this to `true` to use an existing SNS topic. When set to `true` you must provide the `sns_topic_arn` | `bool` | `false` | no |
 | tags | A map/dictionary of Tags to be assigned to created resources. | `map(string)` | `{}` | no |
 | wait_time | Define a custom delay between cloud resource provision and Lacework external integration to avoid errors while things settle down. Use `10s` for 10 seconds, `5m` for 5 minutes. | `string` | `10s` | no |
 

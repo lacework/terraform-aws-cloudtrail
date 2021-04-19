@@ -19,8 +19,13 @@ output "sqs_arn" {
 }
 
 output "sns_arn" {
-  value       = aws_sns_topic.lacework_cloudtrail_sns_topic.arn
+  value       = local.sns_topic_arn
   description = "SNS Topic ARN"
+}
+
+output "sns_name" {
+  value       = local.sns_topic_name
+  description = "SNS Topic name"
 }
 
 output "external_id" {
