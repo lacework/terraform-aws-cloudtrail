@@ -1,8 +1,8 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v0.1.7`.
+Another day, another release. These are the release notes for the version `v0.2.0`.
 
-## Bug Fixes
-* fix: loosen up required version of Lacework provider (#27) (Alan Nix)([c7d44a9](https://github.com/lacework/terraform-aws-cloudtrail/commit/c7d44a973ae6480fc62a57cb7f85dad052f6eab8))
+## Features
+* feat: allow explicit use of an existing SNS topic (#30) (Alan Nix)([3c5a85d](https://github.com/lacework/terraform-aws-cloudtrail/commit/3c5a85d9a1ede1ae7a4e6db648e50b6e6c1772c2))
 ## Other Changes
-* chore: loosen up version pinnings (Salim Afiune Maya)([8bbbd32](https://github.com/lacework/terraform-aws-cloudtrail/commit/8bbbd3220452875d6116842ce94c4fc44f1978d9))
-* ci: switch releases to be own by Lacework releng ⚡ (Salim Afiune Maya)([0678609](https://github.com/lacework/terraform-aws-cloudtrail/commit/067860970f5cabf2e3a1692ce202a0c4261c1cdb))
+* ci: update release scripts (#32) (Salim Afiune)([b109804](https://github.com/lacework/terraform-aws-cloudtrail/commit/b1098044da7494a4d1e575bacfc45f117ce21f3c))
+* ci: Remove CircleCI in favor of CodeFresh (#31) (Darren)([e5ad1f6](https://github.com/lacework/terraform-aws-cloudtrail/commit/e5ad1f638ce9b3cbdcba4ad922aacd0b3d707eae))
