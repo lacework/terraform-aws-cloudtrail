@@ -2,26 +2,24 @@
 
 This example integrates an existing CloudTrail with Lacework that does not have SNS notifications enabled. The module will automatically create an SNS topic that must be configured into the existing CloudTrail, either manually or via your own Terraform code.
 
-**IMPORTANT** The new SNS topic must be created in the same region as the existing CloudTrail.
-
-The fields required for this example are:
-
-| Name | Description | Type |
-|------|-------------|------|
-| `use_existing_cloudtrail` | Set this to `true` to use an existing CloudTrail. | `bool` |
-| `bucket_name` | The S3 bucket name configured in the existing CloudTrail. | `string` |
-| `bucket_arn` | The S3 bucket ARN configured in the existing CloudTrail. | `string` |
-
 **IMPORTANT:** If the existing CloudTrail does have SNS notification enabled, look at
 the example named [existing-cloudtrail](https://registry.terraform.io/modules/lacework/cloudtrail/aws/latest/examples/existing-cloudtrail)
 
-After running `terraform apply`, it is necessary to configure the SNS topic into
-the existing CloudTrail
+**IMPORTANT:** The new SNS topic must be created in the same region as the existing CloudTrail.
 
-**IMPORTANT: This example does not modify your CloudTrail, therefore, you must enable
-SNS delivery notifications manually and point to the generated SNS topic.**
+## Inputs
+
+| Name                      | Description                                               | Type     |
+| ------------------------- | --------------------------------------------------------- | -------- |
+| `use_existing_cloudtrail` | Set this to `true` to use an existing CloudTrail.         | `bool`   |
+| `bucket_name`             | The S3 bucket name configured in the existing CloudTrail. | `string` |
+| `bucket_arn`              | The S3 bucket ARN configured in the existing CloudTrail.  | `string` |
+
+**IMPORTANT:** This example does not modify your CloudTrail, therefore, you must enable
+SNS delivery notifications manually and point to the generated SNS topic.
 
 ## Enable SNS delivery notifications manually
+
 ![](https://techally-artifacts.s3-us-west-2.amazonaws.com/terraform-module-docs/cloudtrail_enable_sns_delivery_notifications.gif)
 
 ## Enable SNS delivery notifications via Terraform
@@ -40,7 +38,7 @@ resource "aws_cloudtrail" "your_existing_trail" {
 
 module "lacework_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1.3"
+  version = "~> 0.1"
 
   use_existing_cloudtrail = true
   bucket_name             = "bucket name from existing cloudtrail"

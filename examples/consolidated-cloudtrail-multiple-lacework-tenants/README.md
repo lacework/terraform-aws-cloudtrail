@@ -1,4 +1,5 @@
 # Consolidated CloudTrail - Multiple Lacework Accounts
+
 This example configures a consolidated cloudtrail on three AWS accounts, one main
 account that owns the consolidated CloudTrail and two sub-accounts where we configure
 sub-tails to point to the main trail from the main account.
@@ -7,9 +8,11 @@ The only difference from the `consolidated-cloudtrail` example is that here we c
 the Lacework integration at the Organization level and map the AWS accounts to Lacework
 sub-accounts via the `org_account_mappings` field.
 
-## main.tf
+## Sample Code
 
-```
+### main.tf
+
+```hcl
 provider "lacework" {
   profile = "main-account"
   alias   = "main-account"
@@ -23,7 +26,7 @@ provider "aws" {
 
 module "main_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1.5"
+  version = "~> 0.1"
   providers = {
     aws      = aws.main-account
     lacework = lacework.main-account
@@ -46,8 +49,9 @@ module "main_cloudtrail" {
 }
 ```
 
-## sub_account_1.tf
-```
+### sub_account_1.tf
+
+```hcl
 provider "aws" {
   profile = "sub-account-1"
   alias   = "sub-account-1"
@@ -63,8 +67,9 @@ resource "aws_cloudtrail" "sub_account_1" {
 }
 ```
 
-## sub_account_2.tf
-```
+### sub_account_2.tf
+
+```hcl
 provider "aws" {
   profile = "sub-account-2"
   alias   = "sub-account-2"
