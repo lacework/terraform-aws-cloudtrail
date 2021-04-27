@@ -2,7 +2,7 @@
 
 This example integrates an existing CloudTrail and uses an existing IAM Role to configure the cross-account policy to provide Lacework access to monitor the trail.
 
-The following fields are required:
+## Inputs
 
 | Name                      | Description                                               | Type     |
 | ------------------------- | --------------------------------------------------------- | -------- |
@@ -15,7 +15,9 @@ The following fields are required:
 | `iam_role_arn`            | The existing IAM role ARN.                                | `string` |
 | `iam_role_name`           | The existing IAM role name.                               | `string` |
 
-```
+## Sample Code
+
+```hcl
 provider "lacework" {}
 
 provider "aws" {
@@ -24,7 +26,7 @@ provider "aws" {
 
 module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1.5"
+  version = "~> 0.1"
 
   # Use an existing CloudTrail
   use_existing_cloudtrail = true

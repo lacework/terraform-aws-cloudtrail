@@ -2,7 +2,11 @@
 
 This example integrates an existing CloudTrail with Lacework and uses an existing SNS topic already configured for the trail.
 
-The fields required for this example are:
+**IMPORTANT: This example assumes that your CloudTrail is already sending delivery notifications
+to the provided SNS topic. If the existing CloudTrail does NOT have SNS notification enabled,
+look at the example named [existing-cloudtrail-without-sns-topic](https://registry.terraform.io/modules/lacework/cloudtrail/aws/latest/examples/existing-cloudtrail-without-sns-topic)**
+
+## Inputs
 
 | Name                      | Description                                               | Type     |
 | ------------------------- | --------------------------------------------------------- | -------- |
@@ -12,11 +16,9 @@ The fields required for this example are:
 | `use_existing_sns_topic`  | Set this to `true` to use an existing SNS topic           | `bool`   |
 | `sns_topic_arn`           | The SNS topic ARN configured in the existing CloudTrail.  | `string` |
 
-**IMPORTANT: This example assumes that your CloudTrail is already sending delivery notifications
-to the provided SNS topic. If the existing CloudTrail does NOT have SNS notification enabled,
-look at the example named [existing-cloudtrail-without-sns-topic](https://registry.terraform.io/modules/lacework/cloudtrail/aws/latest/examples/existing-cloudtrail-without-sns-topic)**
+## Sample Code
 
-```
+```hcl
 provider "lacework" {}
 
 provider "aws" {
@@ -25,7 +27,7 @@ provider "aws" {
 
 module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1.5"
+  version = "~> 0.1"
 
   # Use an existing CloudTrail
   use_existing_cloudtrail = true
