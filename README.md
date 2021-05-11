@@ -52,3 +52,4 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | sqs_name | SQS Queue name |
 | sqs_arn | SQS Queue ARN |
 | sns_arn | SNS Topic ARN |
+
