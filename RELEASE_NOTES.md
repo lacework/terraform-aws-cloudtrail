@@ -1,9 +1,11 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v0.2.1`.
+Another day, another release. These are the release notes for the version `v0.2.2`.
 
+## Bug Fixes
+* fix(ci): ignore .terraform.lock.hcl files (#46) (Salim Afiune)([a704570](https://github.com/lacework/terraform-aws-cloudtrail/commit/a70457073f862ff7228fcfedeb4e803ff1a7d333))
+* fix: output reference to local iam_role_name variable (#45) (Salim Afiune)([bf639ab](https://github.com/lacework/terraform-aws-cloudtrail/commit/bf639abf18cc34eea5523fabab7d69a9f5ba9cc8))
 ## Documentation Updates
-* docs: updated example doc structure and version constraints (#34) (Alan Nix)([e790562](https://github.com/lacework/terraform-aws-cloudtrail/commit/e790562b5518fb32bdfec43497de8df788627c39))
+* docs: fix for module reference in 'existing-encrypted-cloudtrail' (#40) (Alan Nix)([fb42d89](https://github.com/lacework/terraform-aws-cloudtrail/commit/fb42d897b8303c006552ecbf7a7bd108ca6be541))
 ## Other Changes
-* chore: bump required version of TF to 0.12.31 (#37) (Scott Ford)([ffe0d5e](https://github.com/lacework/terraform-aws-cloudtrail/commit/ffe0d5e8cecdc05ab5b345a8835744182b9ed63a))
-* chore: version bump to v0.2.1-dev (Lacework)([2eb3e7b](https://github.com/lacework/terraform-aws-cloudtrail/commit/2eb3e7b78727661fae916a16af3a8fe0dc01a5d6))
-* ci: fix finding major versions during release (#35) (Salim Afiune)([c0acb1b](https://github.com/lacework/terraform-aws-cloudtrail/commit/c0acb1b329a2ead4de57c2b2f8d3a6331a55e2f9))
+* chore: version bump to v0.2.2-dev (Lacework)([25fad2f](https://github.com/lacework/terraform-aws-cloudtrail/commit/25fad2fe87c25b7c562c194a5b74e7badf55f9bd))
+* ci: sign lacework-releng commits (#43) (Salim Afiune)([4c66775](https://github.com/lacework/terraform-aws-cloudtrail/commit/4c66775acbfad026e2a70f7211a21f7598006613))
