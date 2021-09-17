@@ -1,15 +1,15 @@
 # Contributing to the Lacework Terraform Modules
 
-#### Table Of Contents
+### Table Of Contents
 
-[Before getting started?](#before-getting-started)
+* [Before getting started?](#before-getting-started)
 
-[How to Contribute?](#how-can-i-contribute)
-* [Reporting Bugs](#reporting-bugs)
-* [Feature Requests](#feature-requests)
-* [Pull Requests](#pull-requests)
+* [How to Contribute?](#how-can-i-contribute)
+    * [Reporting Bugs](#reporting-bugs)
+    * [Feature Requests](#feature-requests)
+    * [Pull Requests](#creating-a-pull-request)
 
-[Developer Guidelines](/DEVELOPER_GUIDELINES.md)
+* [Developer Guidelines](/DEVELOPER_GUIDELINES.md)
 
 
 ## Before getting started
