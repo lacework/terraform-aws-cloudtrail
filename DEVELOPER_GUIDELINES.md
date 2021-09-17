@@ -113,10 +113,12 @@ For more information visit Semantic Versioning 2.0.0
 ## Commit message standard
 
 The format is:
+
+```
 type(scope): subject
 BODY
 FOOTER
-
+```
 Each commit message consists of a header, body, and footer. The header is mandatory, the scope is optional, the type and subject are mandatory.
 When writing a commit message try and limit each line of the commit to a max of 100 hundred characters, so it can be read easily.
 
