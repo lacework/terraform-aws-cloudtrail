@@ -3,7 +3,7 @@ name: Pull request template
 about: 'type(scope): Subject of the pull request '
 ---
 
-***Issue***: Include link to the Jira Issue
+***Issue***: Include link to the Jira/Github Issue
 
 ***Description:***
 Provide a detailed description of the changes made by this pull request.
