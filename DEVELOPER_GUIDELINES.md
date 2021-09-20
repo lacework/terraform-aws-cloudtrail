@@ -68,16 +68,12 @@ Additionally, any required variables like api keys, or required tagging should n
 
 A few best practices for organizing Terraform projects: 
 
-
-main.tf - Store the main structure of your terraform code in this file
-variables.tf - All variables for your project
-
-output.tf - All outputs in this file
-
-tfvars.example - An example terraform.tfvars file for easy cp for users (note: *.tfvars are typically 
+* `main.tf` - Store the main structure of your terraform code in this file
+* `variables.tf` - All variables for your project
+* `output.tf` - All outputs in this file
+* `tfvars.example` - An example terraform.tfvars file for easy cp for users (note: *.tfvars are typically 
 ignored by .gitignore
-
-.gitignore - Critical to ensure that any sensitive information used in tfvars are not checked in to git
+* `.gitignore` - Critical to ensure that any sensitive information used in tfvars are not checked in to git
 
 
 ***Version Support / Documentation***
@@ -108,7 +104,7 @@ module "aws_cloudtrail" {
 
 The example above will work for version 0.1.9 as well as 0.4.0, but will not pull in any major releases such as 1.0.0.
 
-For more information visit Semantic Versioning 2.0.0 
+For more information visit [Semantic Versioning 2.0.0](https://semver.org/) 
 
 ## Commit message standard
 
