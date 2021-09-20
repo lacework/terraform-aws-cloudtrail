@@ -12,10 +12,10 @@ default: ci
 AWS_REGION?=us-west-2
 export AWS_REGION
 
-.PHONEY: ci
+.PHONY: ci
 ci: ## *CI ONLY* Runs tests on CI pipeline
 	scripts/ci_tests.sh
 
-.PHONEY: release
+.PHONY: release
 release: ci ## *CI ONLY* Prepares a release of the Terraform module
 	scripts/release.sh prepare

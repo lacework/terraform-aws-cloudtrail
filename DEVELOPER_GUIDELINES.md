@@ -78,7 +78,7 @@ ignored by .gitignore
 
 ***Version Support / Documentation***
 
-Hashicorp release frequent patch and minor updates as needed, as well as new major releases of Terraform each year. Although Hashicorp provide solid documentation on how to upgrade between major releases of Terraform, Lacework must contend with the fact that Lacework customers do not all upgrade in a timely manor. For this reason Tech Ally must continue to update documentation with supported versions of Terraform, as well as update CI pipelines to test changes across each supported version. 
+Hashicorp release frequent patch and minor updates as needed, as well as new major releases of Terraform each year. Although Hashicorp provide solid documentation on how to upgrade between major releases of Terraform, Lacework must contend with the fact that Lacework customers do not all upgrade in a timely manor. For this reason Tech Alliances Team must continue to update documentation with supported versions of Terraform, as well as update CI pipelines to test changes across each supported version. 
 
 ***Standard Versioning for Code Snippets***
 All customer facing code snippets should adhere to the standard of using pessimistic version constraint to minor releases. 
