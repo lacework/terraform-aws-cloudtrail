@@ -61,7 +61,7 @@ variable "enable_log_file_validation" {
 variable "bucket_name" {
   type        = string
   default     = ""
-  description = "The S3 bucket name is required when setting use_existing_cloudtrail to true"
+  description = "Optional value to specify name for a newly created S3 bucket. Not required when `use_existing_cloudtrail` is true."
 }
 
 variable "bucket_arn" {

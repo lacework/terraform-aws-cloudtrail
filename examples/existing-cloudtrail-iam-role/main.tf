@@ -10,7 +10,6 @@ module "aws_cloudtrail" {
   # Use an existing CloudTrail
   use_existing_cloudtrail = true
   bucket_arn              = "arn:aws:s3:::lacework-ct-bucket-7bb591f4"
-  bucket_name             = "lacework-ct-bucket-7bb591f4"
 
   # Use an existing SNS Topic
   use_existing_sns_topic = true

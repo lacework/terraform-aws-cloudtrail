@@ -14,7 +14,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | cloudtrail_name | Name of the CloudTrail | `string` | "lacework-cloudtrail" | no |
 | enable_log_file_validation | Specifies whether CloudTrail log file integrity validation is enabled | `bool` | `false` | no |
 | bucket_force_destroy | Force destroy bucket (Required when bucket not empty) | `bool` | false | no |
-| bucket_name | Name of S3 bucket. Required when setting `use_existing_cloudtrail` to true | `string` | "" | no |
+| bucket_name | Optional value to specify name for a newly created S3 bucket. Not required when `use_existing_cloudtrail` is true. | `string` | "" | no |
 | bucket_arn | The S3 bucket ARN is required only when setting `use_existing_cloudtrail` to true | `string` | "" | no |
 | bucket_enable_encryption | Set this to `true` to enable encryption on a created S3 bucket | `bool` | false | no |
 | bucket_enable_logs | Set this to `true` to enable access logging on a created S3 bucket | `bool` | false | no |

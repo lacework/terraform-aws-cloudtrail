@@ -12,7 +12,6 @@ the example named [existing-cloudtrail](https://registry.terraform.io/modules/la
 | Name                      | Description                                               | Type     |
 | ------------------------- | --------------------------------------------------------- | -------- |
 | `use_existing_cloudtrail` | Set this to `true` to use an existing CloudTrail.         | `bool`   |
-| `bucket_name`             | The S3 bucket name configured in the existing CloudTrail. | `string` |
 | `bucket_arn`              | The S3 bucket ARN configured in the existing CloudTrail.  | `string` |
 
 **IMPORTANT:** This example does not modify your CloudTrail, therefore, you must enable
@@ -41,7 +40,6 @@ module "lacework_cloudtrail" {
   version = "~> 0.1"
 
   use_existing_cloudtrail = true
-  bucket_name             = "bucket name from existing cloudtrail"
   bucket_arn              = "bucket ARN from existing cloudtrail"
 }
 ```
