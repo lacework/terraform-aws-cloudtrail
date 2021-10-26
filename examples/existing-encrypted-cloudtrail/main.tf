@@ -11,7 +11,6 @@ module "aws_cloudtrail" {
   use_existing_cloudtrail  = true
   bucket_arn               = "arn:aws:s3:::lacework-ct-bucket-8805c0bf"
   bucket_enable_encryption = true
-  bucket_name              = "lacework-ct-bucket-8805c0bf"
   bucket_sse_algorithm     = "aws:kms"
   bucket_sse_key_arn       = "arn:aws:kms:us-east-1:1234567890:key/6e2010aa-27e4-49c6-8887-956abc1caeb9"
 
