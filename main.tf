@@ -1,12 +1,12 @@
 locals {
   trimmed_bucket_arn = var.use_existing_cloudtrail ? trimsuffix(var.bucket_arn, "/") : ""
-  bucket_arn      = var.use_existing_cloudtrail ?  local.trimmed_bucket_arn : aws_s3_bucket.cloudtrail_bucket[0].arn
-  split_bucket_arn = var.use_existing_cloudtrail ? split(":",local.trimmed_bucket_arn) : []
-  bucket_name     = var.use_existing_cloudtrail ? element(local.split_bucket_arn,(length(local.split_bucket_arn)-1)) : ( length(var.bucket_name) > 0 ? var.bucket_name : "${var.prefix}-bucket-${random_id.uniq.hex}" )
-  log_bucket_name = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
-  sns_topic_name  = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
-  sns_topic_arn   = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
-  sqs_queue_name  = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
+  bucket_arn         = var.use_existing_cloudtrail ? local.trimmed_bucket_arn : aws_s3_bucket.cloudtrail_bucket[0].arn
+  split_bucket_arn   = var.use_existing_cloudtrail ? split(":", local.trimmed_bucket_arn) : []
+  bucket_name        = var.use_existing_cloudtrail ? element(local.split_bucket_arn, (length(local.split_bucket_arn) - 1)) : (length(var.bucket_name) > 0 ? var.bucket_name : "${var.prefix}-bucket-${random_id.uniq.hex}")
+  log_bucket_name    = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
+  sns_topic_name     = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
+  sns_topic_arn      = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
+  sqs_queue_name     = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
   cross_account_policy_name = (
     length(var.cross_account_policy_name) > 0 ? var.cross_account_policy_name : "${var.prefix}-cross-acct-policy-${random_id.uniq.hex}"
   )
@@ -286,6 +286,7 @@ resource "aws_iam_policy" "cross_account_policy" {
   name        = local.cross_account_policy_name
   description = "A cross account policy to allow Lacework to pull config and cloudtrail"
   policy      = data.aws_iam_policy_document.cross_account_policy.json
+  tags        = var.tags
 }
 
 module "lacework_ct_iam_role" {
