@@ -345,3 +345,4 @@ resource "lacework_integration_aws_ct" "default" {
 
   depends_on = [time_sleep.wait_time]
 }
+
