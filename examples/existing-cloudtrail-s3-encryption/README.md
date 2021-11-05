@@ -1,6 +1,6 @@
-# Integrate Existing Encrypted CloudTrail
+# Integrate Existing CloudTrail w/ S3 Object Encryption
 
-In this example we let users pass an existing CloudTrail that is encrypted using a KMS key, the fields required for this example are:
+In this example we let users pass an existing CloudTrail that is using S3 object encryption with a KMS key, the fields required for this example are:
 
 ## Inputs
 
@@ -33,7 +33,7 @@ module "aws_cloudtrail" {
   bucket_arn               = "arn:aws:s3:::lacework-ct-bucket-8805c0bf"
   bucket_enable_encryption = true
   bucket_sse_algorithm     = "aws:kms"
-  bucket_sse_key_arn       = "arn:aws:kms:us-east-1:1234567890:key/6e2010aa-27e4-49c6-8887-956abc1caeb9"
+  bucket_sse_key_arn       = "arn:aws:kms:us-west-2:123456789012:key/6e2010aa-27e4-49c6-8887-956abc1caeb9"
 
   # Use an existing SNS Topic
   use_existing_sns_topic = true
