@@ -21,7 +21,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | bucket_enable_mfa_delete | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | `false` | no |
 | bucket_enable_versioning | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | false | no |
 | bucket_sse_algorithm | Name of the server-side encryption algorithm to use ("AES256" or "aws:kms") | `string` | AES256 | no |
-| bucket_sse_key_arn | The ARN of the KMS encryption key to be used (Required when using "aws:kms") | `string` | "" | no |
+| bucket_sse_key_arn | The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms`) | `string` | "" | no |
 | external_id_length | Length of External ID (max 1224) | `number` | 16 | no |
 | iam_role_external_id | External ID for IAM Role | `string` | "" | no |
 | iam_role_name |  The IAM role name | `string` | "lacework_iam_role" | no |
@@ -30,6 +30,8 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | prefix | The prefix that will be use at the beginning of every generated resource | `string` | lacework-ct | no |
 | sns_topic_arn | SNS topic ARN. Can be used when using an existing resource. | `string` | "" | no |
 | sns_topic_name | SNS topic name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
+| sqs_encryption_enabled | Set this to `true` to enable server-side encryption on SQS. | `bool` | `false` | no |
+| sqs_encryption_key_arn | The ARN of the KMS encryption key to be used for SQS (Required when `sqs_encryption_enabled` is `true`) | `string` | "" | no |
 | sqs_queue_name | SQS queue name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
 | sqs_queues | List of SQS queues to configure in the Lacework cross-account policy. | `list(string)` | `[]` | no |
 | consolidated_trail | Set this to `true` to configure a consolidated cloudtrail. | `bool` | `false` | no |

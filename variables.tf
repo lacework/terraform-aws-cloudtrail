@@ -109,7 +109,7 @@ variable "bucket_sse_algorithm" {
 variable "bucket_sse_key_arn" {
   type        = string
   default     = ""
-  description = "The ARN of the KMS encryption key to be used (Required when using 'aws:kms')"
+  description = "The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms`)"
 }
 
 variable "log_bucket_name" {
@@ -134,6 +134,18 @@ variable "sqs_queue_name" {
   type        = string
   default     = ""
   description = "The SQS queue name"
+}
+
+variable "sqs_encryption_enabled" {
+  type        = bool
+  default     = false
+  description = "Set this to `true` to enable server-side encryption on SQS."
+}
+
+variable "sqs_encryption_key_arn" {
+  type        = string
+  default     = ""
+  description = "The ARN of the KMS encryption key to be used for SQS (Required when `sqs_encryption_enabled` is `true`)"
 }
 
 variable "use_existing_cloudtrail" {

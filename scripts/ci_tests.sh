@@ -14,7 +14,8 @@ TEST_CASES=(
   examples/complete-cloudtrail
   examples/consolidated-cloudtrail-multiple-lacework-tenants
   examples/consolidated-cloudtrail
-  examples/existing-encrypted-cloudtrail
+  examples/existing-cloudtrail-end-to-end-encryption
+  examples/existing-cloudtrail-s3-encryption
   examples/existing-cloudtrail-iam-role
   examples/existing-cloudtrail
   examples/existing-cloudtrail-without-sns-topic

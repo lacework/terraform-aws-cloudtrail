@@ -177,8 +177,9 @@ resource "aws_sns_topic_policy" "default" {
 }
 
 resource "aws_sqs_queue" "lacework_cloudtrail_sqs_queue" {
-  name = local.sqs_queue_name
-  tags = var.tags
+  name              = local.sqs_queue_name
+  kms_master_key_id = var.sqs_encryption_enabled ? var.sqs_encryption_key_arn : ""
+  tags              = var.tags
 }
 
 resource "aws_sqs_queue_policy" "lacework_sqs_queue_policy" {
@@ -228,6 +229,15 @@ data "aws_iam_policy_document" "cross_account_policy" {
       sid       = "DecryptLogFiles"
       actions   = ["kms:Decrypt"]
       resources = [var.bucket_sse_key_arn]
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.sqs_encryption_enabled == true ? [1] : []
+    content {
+      sid       = "DecryptQueueFiles"
+      actions   = ["kms:Decrypt"]
+      resources = [var.sqs_encryption_key_arn]
     }
   }
 
