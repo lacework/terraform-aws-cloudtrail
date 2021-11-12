@@ -48,8 +48,8 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   dynamic "logging" {
     for_each = var.bucket_enable_logs == true ? [1] : []
     content {
-      target_bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
-      target_prefix = "log/"
+      target_bucket = local.log_bucket_name
+      target_prefix = var.access_log_prefix
     }
   }
 
@@ -69,7 +69,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_log_bucket" {
-  count         = var.use_existing_cloudtrail ? 0 : (var.bucket_enable_logs ? 1 : 0)
+  count         = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_enable_logs ? 1 : 0)
   bucket        = local.log_bucket_name
   force_destroy = var.bucket_force_destroy
   acl           = "log-delivery-write"
