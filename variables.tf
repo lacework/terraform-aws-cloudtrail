@@ -115,7 +115,13 @@ variable "bucket_sse_key_arn" {
 variable "log_bucket_name" {
   type        = string
   default     = ""
-  description = "Name of the S3 bucket for access logs"
+  description = "Name of the S3 bucket for access logs. Is required when setting `use_existing_access_log_bucket` to true"
+}
+
+variable "access_log_prefix" {
+  type        = string
+  default     = "log/"
+  description = "Optional value to specify a key prefix for access log objects for logging S3 bucket"
 }
 
 variable "sns_topic_arn" {
@@ -152,6 +158,12 @@ variable "use_existing_cloudtrail" {
   type        = bool
   default     = false
   description = "Set this to true to use an existing cloudtrail. Default behavior enables new cloudtrail"
+}
+
+variable "use_existing_access_log_bucket" {
+  type        = bool
+  default     = false
+  description = "Set this to `true` to use an existing bucket for access logging. Default behavior creates a new access log bucket if logging is enabled"
 }
 
 variable "use_existing_sns_topic" {
