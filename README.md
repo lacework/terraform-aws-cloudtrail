@@ -37,7 +37,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | sqs_queues | List of SQS queues to configure in the Lacework cross-account policy. | `list(string)` | `[]` | no |
 | consolidated_trail | Set this to `true` to configure a consolidated cloudtrail. | `bool` | `false` | no |
 | org_account_mappings | Mapping of AWS accounts to Lacework accounts within a Lacework organization. | `list(object)` | `[]` | no |
-| use_existing_cloudtrail | Set this to `true` to use an existing cloudtrail. When set to `true` you must provide the `bucket_name` | `bool` | `false` | no |
+| use_existing_cloudtrail | Set this to `true` to use an existing cloudtrail. | `bool` | `false` | no |
 | use_existing_access_log_bucket | Set this to `true` to use an existing bucket for access logging. When set to `true` you must provide the `log_bucket_name` | `bool` | `false` | no |
 | use_existing_iam_role | Set this to `true` to use an existing IAM role. When set to `true` you must provide both the `iam_role_name` and `iam_role_external_id` | `bool` | `false` | no |
 | use_existing_sns_topic | When using an existing CloudTrail, set this to `true` to use an existing SNS topic. When set to `true` you must provide the `sns_topic_arn` | `bool` | `false` | no |
