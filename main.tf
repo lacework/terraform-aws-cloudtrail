@@ -15,11 +15,24 @@ locals {
   iam_role_name = var.use_existing_iam_role ? var.iam_role_name : (
     length(var.iam_role_name) > 0 ? var.iam_role_name : "${var.prefix}-iam-${random_id.uniq.hex}"
   )
-  mfa_delete = var.bucket_enable_versioning && var.bucket_enable_mfa_delete
+  mfa_delete                = var.bucket_enable_versioning && var.bucket_enable_mfa_delete
+  bucket_encryption_enabled = var.bucket_enable_encryption && var.bucket_encryption_enabled
+  bucket_logs_enabled       = var.bucket_logs_enabled && var.bucket_enable_logs
+  bucket_versioning_enabled = var.bucket_enable_versioning && var.bucket_versioning_enabled
+  bucket_sse_key_arn = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
 }
 
 resource "random_id" "uniq" {
   byte_length = 4
+}
+
+resource "aws_kms_key" "lacework_kms_key" {
+  count                   = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? 0 : 1
+  description             = "A KMS key used to encrypt CloudTrail logs which are monitored by Lacework"
+  deletion_window_in_days = var.kms_key_deletion_days
+  multi_region            = var.kms_key_multi_region
+  tags                    = var.tags
+  policy                  = data.aws_iam_policy_document.kms_key_policy.json
 }
 
 resource "aws_cloudtrail" "lacework_cloudtrail" {
@@ -27,7 +40,7 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   name                       = var.cloudtrail_name
   is_multi_region_trail      = true
   s3_bucket_name             = local.bucket_name
-  kms_key_id                 = var.bucket_sse_key_arn
+  kms_key_id                 = local.bucket_sse_key_arn
   sns_topic_name             = local.sns_topic_arn
   tags                       = var.tags
   enable_log_file_validation = var.enable_log_file_validation
@@ -41,12 +54,12 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   policy        = data.aws_iam_policy_document.cloudtrail_s3_policy.json
 
   versioning {
-    enabled    = var.bucket_enable_versioning
+    enabled    = local.bucket_versioning_enabled
     mfa_delete = local.mfa_delete
   }
 
   dynamic "logging" {
-    for_each = var.bucket_enable_logs == true ? [1] : []
+    for_each = local.bucket_logs_enabled == true ? [1] : []
     content {
       target_bucket = local.log_bucket_name
       target_prefix = var.access_log_prefix
@@ -54,11 +67,11 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   }
 
   dynamic "server_side_encryption_configuration" {
-    for_each = var.bucket_enable_encryption == true ? [1] : []
+    for_each = local.bucket_encryption_enabled == true ? [1] : []
     content {
       rule {
         apply_server_side_encryption_by_default {
-          kms_master_key_id = var.bucket_sse_key_arn
+          kms_master_key_id = local.bucket_sse_key_arn
           sse_algorithm     = var.bucket_sse_algorithm
         }
       }
@@ -69,22 +82,22 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
 }
 
 resource "aws_s3_bucket" "cloudtrail_log_bucket" {
-  count         = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_enable_logs ? 1 : 0)
+  count         = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (local.bucket_logs_enabled ? 1 : 0)
   bucket        = local.log_bucket_name
   force_destroy = var.bucket_force_destroy
   acl           = "log-delivery-write"
 
   versioning {
-    enabled    = var.bucket_enable_versioning
+    enabled    = local.bucket_versioning_enabled
     mfa_delete = local.mfa_delete
   }
 
   dynamic "server_side_encryption_configuration" {
-    for_each = var.bucket_enable_encryption == true ? [1] : []
+    for_each = local.bucket_encryption_enabled == true ? [1] : []
     content {
       rule {
         apply_server_side_encryption_by_default {
-          kms_master_key_id = var.bucket_sse_key_arn
+          kms_master_key_id = local.bucket_sse_key_arn
           sse_algorithm     = var.bucket_sse_algorithm
         }
       }
@@ -96,6 +109,86 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
 
 # we need the identity of the caller to get their account_id for the s3 bucket
 data "aws_caller_identity" "current" {}
+
+data "aws_region" "current" {}
+
+data "aws_iam_policy_document" "kms_key_policy" {
+  version = "2012-10-17"
+
+  statement {
+    sid    = "Enable IAM User Permissions"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions   = ["kms:*"]
+    resources = ["*"]
+  }
+
+  statement {
+    sid    = "Allow CloudTrail to encrypt logs"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    actions   = ["kms:GenerateDataKey*"]
+    resources = ["arn:aws:s3:::${local.bucket_name}"]
+
+    condition {
+      test     = "StringLike"
+      variable = "kms:EncryptionContext:aws:cloudtrail:arn"
+      values   = ["arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"]
+    }
+  }
+
+  statement {
+    sid    = "Allow CloudTrail to describe key"
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    actions   = ["kms:DescribeKey"]
+    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/key_ID"]
+  }
+
+  statement {
+    sid    = "Allow principals in the account to decrypt log files"
+    effect = "Allow"
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    actions = [
+      "kms:Decrypt",
+      "kms:ReEncryptFrom"
+    ]
+    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/key_ID"]
+
+    condition {
+      test     = "StringEquals"
+      variable = "kms:CallerAccount"
+      values   = [data.aws_caller_identity.current.account_id]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "kms:EncryptionContext:aws:cloudtrail:arn"
+      values   = ["arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"]
+    }
+  }
+}
+
 data "aws_iam_policy_document" "cloudtrail_s3_policy" {
   version = "2012-10-17"
 
@@ -222,13 +315,13 @@ data "aws_iam_policy_document" "cross_account_policy" {
     actions   = ["s3:Get*"]
     resources = ["${local.bucket_arn}/*"]
   }
-
+ 
   dynamic "statement" {
-    for_each = var.bucket_enable_encryption == true ? (var.bucket_sse_algorithm == "aws:kms" ? [1] : []) : []
+    for_each = local.bucket_encryption_enabled == true ? (var.bucket_sse_algorithm == "aws:kms" ? [1] : []) : []
     content {
       sid       = "DecryptLogFiles"
       actions   = ["kms:Decrypt"]
-      resources = [var.bucket_sse_key_arn]
+      resources =  (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? [var.bucket_sse_key_arn] : [aws_kms_key.lacework_kms_key[0].arn]
     }
   }
 
