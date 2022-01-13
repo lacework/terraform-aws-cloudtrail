@@ -1,12 +1,14 @@
 locals {
-  trimmed_bucket_arn = var.use_existing_cloudtrail ? trimsuffix(var.bucket_arn, "/") : ""
-  bucket_arn         = var.use_existing_cloudtrail ? local.trimmed_bucket_arn : aws_s3_bucket.cloudtrail_bucket[0].arn
-  split_bucket_arn   = var.use_existing_cloudtrail ? split(":", local.trimmed_bucket_arn) : []
-  bucket_name        = var.use_existing_cloudtrail ? element(local.split_bucket_arn, (length(local.split_bucket_arn) - 1)) : (length(var.bucket_name) > 0 ? var.bucket_name : "${var.prefix}-bucket-${random_id.uniq.hex}")
-  log_bucket_name    = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
-  sns_topic_name     = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
-  sns_topic_arn      = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
-  sqs_queue_name     = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
+  trimmed_bucket_arn          = var.use_existing_cloudtrail ? trimsuffix(var.bucket_arn, "/") : ""
+  bucket_arn                  = var.use_existing_cloudtrail ? local.trimmed_bucket_arn : aws_s3_bucket.cloudtrail_bucket[0].arn
+  split_bucket_arn            = var.use_existing_cloudtrail ? split(":", local.trimmed_bucket_arn) : []
+  bucket_name                 = var.use_existing_cloudtrail ? element(local.split_bucket_arn, (length(local.split_bucket_arn) - 1)) : (length(var.bucket_name) > 0 ? var.bucket_name : "${var.prefix}-bucket-${random_id.uniq.hex}")
+  log_bucket_name             = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
+  s3_notification_lambda_name = length(var.s3_notification_lambda_name) > 0 ? var.s3_notification_lambda_name : "${var.prefix}-s3-notification-relay-${random_id.uniq.hex}"
+  s3_notification_role_name   = length(var.s3_notification_role_name) > 0 ? var.s3_notification_role_name : "${var.prefix}-s3-notification-role-${random_id.uniq.hex}"
+  sns_topic_name              = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
+  sns_topic_arn               = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
+  sqs_queue_name              = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
   cross_account_policy_name = (
     length(var.cross_account_policy_name) > 0 ? var.cross_account_policy_name : "${var.prefix}-cross-acct-policy-${random_id.uniq.hex}"
   )
@@ -354,4 +356,92 @@ resource "lacework_integration_aws_ct" "default" {
   }
 
   depends_on = [time_sleep.wait_time]
+}
+
+data "aws_iam_policy_document" "s3_notification_relay_assume" {
+  count = (var.use_existing_cloudtrail && var.use_s3_notification_relay) ? 1 : 0
+
+  statement {
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+    actions = ["sts:AssumeRole"]
+  }
+}
+
+data "aws_iam_policy_document" "s3_notification_relay_sns" {
+  count = (var.use_existing_cloudtrail && var.use_s3_notification_relay) ? 1 : 0
+
+  statement {
+    effect    = "Allow"
+    actions   = ["sns:Publish"]
+    resources = [local.sns_topic_arn]
+  }
+}
+
+resource "aws_iam_role" "s3_notification_relay" {
+  count = (var.use_existing_cloudtrail && var.use_s3_notification_relay) ? 1 : 0
+
+  name        = local.s3_notification_role_name
+  description = "Allows Lambda function for call AWS services"
+
+  assume_role_policy = data.aws_iam_policy_document.s3_notification_relay_assume[count.index].json
+  inline_policy {
+    name   = "${local.s3_notification_role_name}-policy"
+    policy = data.aws_iam_policy_document.s3_notification_relay_sns[count.index].json
+  }
+  managed_policy_arns = ["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]
+}
+
+resource "aws_lambda_permission" "s3_notification_relay_notify" {
+  count = (var.use_existing_cloudtrail && var.use_s3_notification_relay) ? 1 : 0
+
+  statement_id  = "AllowExecutionFromS3"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.s3_notification_relay[count.index].arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = local.bucket_arn
+}
+
+resource "aws_s3_bucket_notification" "s3_notification_relay" {
+  count = (var.use_existing_cloudtrail && var.use_s3_notification_relay) ? 1 : 0
+
+  bucket = local.bucket_name
+
+  lambda_function {
+    lambda_function_arn = aws_lambda_function.s3_notification_relay[count.index].arn
+    events              = ["s3:ObjectCreated:*"]
+    filter_prefix       = "AWSLogs/"
+  }
+}
+
+resource "aws_cloudwatch_log_group" "s3_notification_relay_lambda" {
+  name              = "/aws/lambda/${local.s3_notification_lambda_name}"
+  retention_in_days = var.s3_notification_lambda_log_retention
+}
+
+data "archive_file" "s3_notification_relay_lambda" {
+  type        = "zip"
+  output_path = "${path.module}/tmp/s3_notification_relay.zip"
+  source_dir  = "${path.module}/functions/source/s3-notification-relay/"
+}
+
+resource "aws_lambda_function" "s3_notification_relay" {
+  count = (var.use_existing_cloudtrail && var.use_s3_notification_relay) ? 1 : 0
+
+  function_name = local.s3_notification_lambda_name
+  role          = aws_iam_role.s3_notification_relay[count.index].arn
+  handler       = "main.handler"
+  runtime       = "python3.9"
+
+  environment {
+    variables = {
+      "SNS_TOPIC_ARN" = local.sns_topic_arn
+    }
+  }
+
+  filename         = data.archive_file.s3_notification_relay_lambda.output_path
+  source_code_hash = data.archive_file.s3_notification_relay_lambda.output_base64sha256
 }

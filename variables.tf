@@ -172,6 +172,30 @@ variable "use_existing_sns_topic" {
   description = "Set this to true to use an existing SNS topic. Default behavior creates a new SNS topic"
 }
 
+variable "s3_notification_lambda_name" {
+  type        = string
+  default     = ""
+  description = "The name for the Lambda function used for the S3 notification relay"
+}
+
+variable "s3_notification_lambda_log_retention" {
+  type        = number
+  default     = 30
+  description = "The number of days in which to retain logs for the s3 notification lambda"
+}
+
+variable "s3_notification_role_name" {
+  type        = string
+  default     = ""
+  description = "The name for the IAM Role used for the S3 notification relay Lambda function"
+}
+
+variable "use_s3_notification_relay" {
+  type        = bool
+  default     = false
+  description = "Set this to `true` to translate S3 bucket notifications for Lacework consumption"
+}
+
 variable "cloudtrail_name" {
   type        = string
   default     = "lacework-cloudtrail"

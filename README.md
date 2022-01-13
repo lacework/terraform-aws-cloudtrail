@@ -29,6 +29,9 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | log_bucket_name | Name of the S3 bucket for access logs. Is required when setting `use_existing_access_log_bucket` to true | `string` | "" | no |
 | access_log_prefix | Optional value to specify a key prefix for access log objects in logging S3 bucket | `string` | "log/" | no |
 | prefix | The prefix that will be use at the beginning of every generated resource | `string` | lacework-ct | no |
+| s3_notification_lambda_log_retention | The number of days in which to retain logs for the s3 notification lambda | `number` | `30` | no |
+| s3_notification_lambda_name | The name for the Lambda function used for the S3 notification relay | `string` | `""` | no |
+| s3_notification_role_name | The name for the IAM Role used for the S3 notification relay Lambda function | `string` | `""` | no |
 | sns_topic_arn | SNS topic ARN. Can be used when using an existing resource. | `string` | "" | no |
 | sns_topic_name | SNS topic name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
 | sqs_encryption_enabled | Set this to `true` to enable server-side encryption on SQS. | `bool` | `false` | no |
@@ -41,6 +44,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | use_existing_access_log_bucket | Set this to `true` to use an existing bucket for access logging. When set to `true` you must provide the `access_log_bucket_arn` | `bool` | `false` | no |
 | use_existing_iam_role | Set this to `true` to use an existing IAM role. When set to `true` you must provide both the `iam_role_name` and `iam_role_external_id` | `bool` | `false` | no |
 | use_existing_sns_topic | When using an existing CloudTrail, set this to `true` to use an existing SNS topic. When set to `true` you must provide the `sns_topic_arn` | `bool` | `false` | no |
+| use_s3_notification_relay | Set this to `true` to translate S3 bucket notifications for Lacework consumption | `bool` | `false` | no |
 | tags | A map/dictionary of Tags to be assigned to created resources. | `map(string)` | `{}` | no |
 | wait_time | Define a custom delay between cloud resource provision and Lacework external integration to avoid errors while things settle down. Use `10s` for 10 seconds, `5m` for 5 minutes. | `string` | `10s` | no |
 

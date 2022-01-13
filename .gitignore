@@ -42,5 +42,6 @@ override.tf.json
 # vim
 *.swp
 
+/tmp
 /.idea/
 .DS_Store

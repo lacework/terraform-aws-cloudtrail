@@ -16,6 +16,7 @@ TEST_CASES=(
   examples/consolidated-cloudtrail
   examples/existing-cloudtrail-end-to-end-encryption
   examples/existing-cloudtrail-s3-encryption
+  examples/existing-cloudtrail-s3-notifications
   examples/existing-cloudtrail-iam-role
   examples/existing-cloudtrail
   examples/existing-cloudtrail-without-sns-topic
