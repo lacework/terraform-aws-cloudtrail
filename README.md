@@ -34,6 +34,8 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | prefix | The prefix that will be use at the beginning of every generated resource | `string` | lacework-ct | no |
 | sns_topic_arn | SNS topic ARN. Can be used when using an existing resource. | `string` | "" | no |
 | sns_topic_name | SNS topic name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
+| sns_topic_encryption_enabled | Set this to `false` to disable encryption on a sns topic. Defaults to true | `bool` | true | no |
+| sns_topic_encryption_key_arn | The ARN of an existing KMS encryption key to be used for SNS | `string` | "" | no |
 | sqs_encryption_enabled | Set this to `true` to enable server-side encryption on SQS. | `bool` | `false` | no |
 | sqs_encryption_key_arn | The ARN of the KMS encryption key to be used for SQS (Required when `sqs_encryption_enabled` is `true`) | `string` | "" | no |
 | sqs_queue_name | SQS queue name. Can be used when generating a new resource or when using an existing resource. | `string` | "" | no |
