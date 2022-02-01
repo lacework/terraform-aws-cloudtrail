@@ -54,7 +54,7 @@ variable "prefix" {
 
 variable "enable_log_file_validation" {
   type        = bool
-  default     = false
+  default     = true
   description = "Specifies whether cloudtrail log file integrity validation is enabled"
 }
 
@@ -72,13 +72,25 @@ variable "bucket_arn" {
 
 variable "bucket_enable_encryption" {
   type        = bool
-  default     = false
+  default     = true
+  description = "(deprecated) Use `bucket_encryption_enabled` instead"
+}
+
+variable "bucket_encryption_enabled" {
+  type        = bool
+  default     = true
   description = "Set this to `true` to enable encryption on a created S3 bucket"
 }
 
 variable "bucket_enable_logs" {
   type        = bool
-  default     = false
+  default     = true
+  description = "(deprecated) Use `bucket_logs_enabled` instead"
+}
+
+variable "bucket_logs_enabled" {
+  type        = bool
+  default     = true
   description = "Set this to `true` to enable access logging on a created S3 bucket"
 }
 
@@ -90,7 +102,13 @@ variable "bucket_enable_mfa_delete" {
 
 variable "bucket_enable_versioning" {
   type        = bool
-  default     = false
+  default     = true
+  description = "(deprecated) Use `bucket_versioning_enabled` instead"
+}
+
+variable "bucket_versioning_enabled" {
+  type        = bool
+  default     = true
   description = "Set this to `true` to enable access versioning on a created S3 bucket"
 }
 
@@ -102,14 +120,14 @@ variable "bucket_force_destroy" {
 
 variable "bucket_sse_algorithm" {
   type        = string
-  default     = "AES256"
+  default     = "aws:kms"
   description = "The encryption algorithm to use for S3 bucket server-side encryption"
 }
 
 variable "bucket_sse_key_arn" {
   type        = string
   default     = ""
-  description = "The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms`)"
+  description = "The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms` and using an existing aws_kms_key)"
 }
 
 variable "log_bucket_name" {
@@ -211,4 +229,16 @@ variable "tags" {
   type        = map(string)
   description = "A map/dictionary of Tags to be assigned to created resources"
   default     = {}
+}
+
+variable "kms_key_deletion_days" {
+  type        = number
+  default     = 30
+  description = "The waiting period, specified in number of days"
+}
+
+variable "kms_key_multi_region" {
+  type        = bool
+  default     = true
+  description = "Whether the KMS key is a multi-region or regional key"
 }
