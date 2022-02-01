@@ -247,6 +247,7 @@ resource "aws_sns_topic" "lacework_cloudtrail_sns_topic" {
   count = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
   name  = local.sns_topic_name
   tags  = var.tags
+  kms_master_key_id = var.sns_topic_encryption_key_enabled ? (length(var.sns_topic_encryption_key_arn) > 0 ? var.sns_topic_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
