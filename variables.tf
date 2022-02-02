@@ -160,7 +160,7 @@ variable "sns_topic_encryption_key_arn" {
   description = "The ARN of an existing KMS encryption key to be used for SNS"
 }
 
-variable "sns_topic_encryption_key_enabled" {
+variable "sns_topic_encryption_enabled" {
   type        = bool
   default     = true
   description = "Set this to `false` to disable encryption on a sns topic. Defaults to true"
