@@ -174,7 +174,7 @@ variable "sqs_queue_name" {
 
 variable "sqs_encryption_enabled" {
   type        = bool
-  default     = false
+  default     = true
   description = "Set this to `true` to enable server-side encryption on SQS."
 }
 

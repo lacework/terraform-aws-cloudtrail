@@ -4,13 +4,9 @@ This example creates a new CloudTrail in an AWS account with all of the required
 
 ## Inputs
 
-| Name                         | Description                                                           | Type   |
-| ---------------------------- | --------------------------------------------------------------------- | ------ |
-| `bucket_enable_encryption`   | Set this to `true` to enable encryption on a created S3 bucket        | `bool` |
-| `bucket_enable_logs`         | Set this to `true` to enable access logging on a created S3 bucket    | `bool` |
-| `bucket_enable_versioning`   | Set this to `true` to enable access versioning on a created S3 bucket | `bool` |
-| `bucket_force_destroy`       | Force destroy bucket (Required when bucket not empty)                 | `bool` |
-| `enable_log_file_validation` | Set this to `true` to use an existing CloudTrail.                     | `bool` |
+| Name                   | Description                                           | Type   |
+| ---------------------- | ----------------------------------------------------- | ------ |
+| `bucket_force_destroy` | Force destroy bucket (Required when bucket not empty) | `bool` |
 
 ## Sample Code
 
@@ -23,13 +19,9 @@ provider "lacework" {}
 
 module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
-  bucket_enable_encryption   = true
-  bucket_enable_logs         = true
-  bucket_enable_versioning   = true
-  bucket_force_destroy       = true
-  enable_log_file_validation = true
+  bucket_force_destroy  = true
 }
 ```
 
