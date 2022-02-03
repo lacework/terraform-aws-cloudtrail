@@ -26,7 +26,7 @@ locals {
   bucket_encryption_enabled = var.bucket_enable_encryption && var.bucket_encryption_enabled
   bucket_logs_enabled       = var.bucket_logs_enabled && var.bucket_enable_logs
   bucket_versioning_enabled = var.bucket_enable_versioning && var.bucket_versioning_enabled
-  bucket_sse_key_arn = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
+  bucket_sse_key_arn        = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
 }
 
 resource "random_id" "uniq" {
