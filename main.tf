@@ -6,7 +6,9 @@ locals {
   log_bucket_name    = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
   sns_topic_name     = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
   sns_topic_arn      = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
+  sns_topic_key_arn  = var.sns_topic_encryption_enabled ? (length(var.sns_topic_encryption_key_arn) > 0 ? var.sns_topic_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
   sqs_queue_name     = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
+  sqs_queue_key_arn  = var.sqs_encryption_enabled ? (length(var.sqs_encryption_key_arn) > 0 ? var.sqs_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
   create_kms_key = (
     (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0)
     || (var.sns_topic_encryption_enabled && length(var.sns_topic_encryption_key_arn) == 0)
@@ -249,10 +251,10 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
 }
 
 resource "aws_sns_topic" "lacework_cloudtrail_sns_topic" {
-  count = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
-  name  = local.sns_topic_name
-  tags  = var.tags
-  kms_master_key_id = var.sns_topic_encryption_enabled ? (length(var.sns_topic_encryption_key_arn) > 0 ? var.sns_topic_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
+  count             = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
+  name              = local.sns_topic_name
+  tags              = var.tags
+  kms_master_key_id = local.sns_topic_key_arn
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
@@ -277,7 +279,7 @@ resource "aws_sns_topic_policy" "default" {
 
 resource "aws_sqs_queue" "lacework_cloudtrail_sqs_queue" {
   name              = local.sqs_queue_name
-  kms_master_key_id = var.sqs_encryption_enabled ? var.sqs_encryption_key_arn : ""
+  kms_master_key_id = local.sqs_queue_key_arn
   tags              = var.tags
 }
 
@@ -321,13 +323,13 @@ data "aws_iam_policy_document" "cross_account_policy" {
     actions   = ["s3:Get*"]
     resources = ["${local.bucket_arn}/*"]
   }
- 
+
   dynamic "statement" {
     for_each = local.bucket_encryption_enabled == true ? (var.bucket_sse_algorithm == "aws:kms" ? [1] : []) : []
     content {
       sid       = "DecryptLogFiles"
       actions   = ["kms:Decrypt"]
-      resources =  (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? [var.bucket_sse_key_arn] : [aws_kms_key.lacework_kms_key[0].arn]
+      resources = [local.bucket_sse_key_arn]
     }
   }
 
@@ -336,7 +338,7 @@ data "aws_iam_policy_document" "cross_account_policy" {
     content {
       sid       = "DecryptQueueFiles"
       actions   = ["kms:Decrypt"]
-      resources = [var.sqs_encryption_key_arn]
+      resources = [local.sqs_queue_key_arn]
     }
   }
 
