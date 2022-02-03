@@ -10,6 +10,7 @@ readonly project_name=terraform-aws-cloudtrail
 
 TEST_CASES=(
   examples/complete-cloudtrail-access-logs
+  examples/complete-cloudtrail-unencrypted
   examples/complete-cloudtrail-versioning
   examples/complete-cloudtrail
   examples/consolidated-cloudtrail-multiple-lacework-tenants
