@@ -7,6 +7,11 @@ locals {
   sns_topic_name     = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
   sns_topic_arn      = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
   sqs_queue_name     = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
+  create_kms_key = (
+    (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0)
+    || (var.sns_topic_encryption_enabled && length(var.sns_topic_encryption_key_arn) == 0)
+    || (var.sqs_encryption_enabled && length(var.sqs_encryption_key_arn) == 0)
+  ) ? 1 : 0
   cross_account_policy_name = (
     length(var.cross_account_policy_name) > 0 ? var.cross_account_policy_name : "${var.prefix}-cross-acct-policy-${random_id.uniq.hex}"
   )
@@ -27,7 +32,7 @@ resource "random_id" "uniq" {
 }
 
 resource "aws_kms_key" "lacework_kms_key" {
-  count                   = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? 0 : 1
+  count                   = local.create_kms_key
   description             = "A KMS key used to encrypt CloudTrail logs which are monitored by Lacework"
   deletion_window_in_days = var.kms_key_deletion_days
   multi_region            = var.kms_key_multi_region
