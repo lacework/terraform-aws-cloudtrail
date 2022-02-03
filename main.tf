@@ -128,43 +128,59 @@ data "aws_iam_policy_document" "kms_key_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["*"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
 
     actions   = ["kms:*"]
     resources = ["*"]
   }
 
-  statement {
-    sid    = "Allow CloudTrail to encrypt logs"
-    effect = "Allow"
+  dynamic "statement" {
+    for_each = (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0) || var.sns_topic_encryption_enabled ? [1] : []
+    content {
+      sid    = "Allow CloudTrail service to encrypt/decrypt"
+      effect = "Allow"
 
-    principals {
-      type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
-    }
+      principals {
+        type        = "Service"
+        identifiers = ["cloudtrail.amazonaws.com"]
+      }
 
-    actions   = ["kms:GenerateDataKey*"]
-    resources = ["arn:aws:s3:::${local.bucket_name}"]
-
-    condition {
-      test     = "StringLike"
-      variable = "kms:EncryptionContext:aws:cloudtrail:arn"
-      values   = ["arn:aws:cloudtrail:*:${data.aws_caller_identity.current.account_id}:trail/*"]
+      actions   = ["kms:GenerateDataKey*", "kms:Decrypt"]
+      resources = ["*"]
     }
   }
 
-  statement {
-    sid    = "Allow CloudTrail to describe key"
-    effect = "Allow"
+  dynamic "statement" {
+    for_each = (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0) ? [1] : []
+    content {
+      sid    = "Allow CloudTrail to describe key"
+      effect = "Allow"
 
-    principals {
-      type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
+      principals {
+        type        = "Service"
+        identifiers = ["cloudtrail.amazonaws.com"]
+      }
+
+      actions   = ["kms:DescribeKey"]
+      resources = ["*"]
     }
+  }
 
-    actions   = ["kms:DescribeKey"]
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/key_ID"]
+  dynamic "statement" {
+    for_each = (var.sns_topic_encryption_enabled && length(var.sns_topic_encryption_key_arn) == 0) ? [1] : []
+    content {
+      sid    = "Allow SNS service to encrypt/decrypt"
+      effect = "Allow"
+
+      principals {
+        type        = "Service"
+        identifiers = ["sns.amazonaws.com"]
+      }
+
+      actions   = ["kms:GenerateDataKey*", "kms:Decrypt"]
+      resources = ["*"]
+    }
   }
 
   statement {
@@ -180,7 +196,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
       "kms:Decrypt",
       "kms:ReEncryptFrom"
     ]
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/key_ID"]
+    resources = ["*"]
 
     condition {
       test     = "StringEquals"
