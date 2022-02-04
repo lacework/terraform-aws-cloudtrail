@@ -154,6 +154,18 @@ variable "sns_topic_name" {
   description = "The SNS topic name"
 }
 
+variable "sns_topic_encryption_key_arn" {
+  type        = string
+  default     = ""
+  description = "The ARN of an existing KMS encryption key to be used for SNS"
+}
+
+variable "sns_topic_encryption_enabled" {
+  type        = bool
+  default     = true
+  description = "Set this to `false` to disable encryption on a sns topic. Defaults to true"
+}
+
 variable "sqs_queue_name" {
   type        = string
   default     = ""
@@ -162,7 +174,7 @@ variable "sqs_queue_name" {
 
 variable "sqs_encryption_enabled" {
   type        = bool
-  default     = false
+  default     = true
   description = "Set this to `true` to enable server-side encryption on SQS."
 }
 

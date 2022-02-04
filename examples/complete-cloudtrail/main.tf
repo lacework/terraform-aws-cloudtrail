@@ -7,7 +7,5 @@ provider "lacework" {}
 module "aws_cloudtrail" {
   source = "../../"
 
-  kms_key_deletion_days = 30
-  bucket_force_destroy  = true
-
+  bucket_force_destroy = true
 }
