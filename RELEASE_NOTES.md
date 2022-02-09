@@ -1,5 +1,5 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v0.6.0`.
+Another day, another release. These are the release notes for the version `v1.0.0`.
 
 ## Features
 * feat: ensure SNS topic is encrypted (Darren Murray)([12a6232](https://github.com/lacework/terraform-aws-cloudtrail/commit/12a62325a85b8e42c6ed6a50ad9ac9f008503349))
