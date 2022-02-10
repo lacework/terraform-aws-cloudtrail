@@ -92,7 +92,7 @@ module "aws_config" {
 ```hcl
 module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 0.1"
+  version = "~> 1.0"
 
   bucket_force_destroy  = true
   use_existing_iam_role = true
