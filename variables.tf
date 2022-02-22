@@ -243,6 +243,12 @@ variable "tags" {
   default     = {}
 }
 
+variable "kms_key_rotation" {
+  type        = bool
+  default     = false
+  description = "Enable KMS automatic key rotation"
+}
+
 variable "kms_key_deletion_days" {
   type        = number
   default     = 30
