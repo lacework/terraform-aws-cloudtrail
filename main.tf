@@ -40,6 +40,7 @@ resource "aws_kms_key" "lacework_kms_key" {
   multi_region            = var.kms_key_multi_region
   tags                    = var.tags
   policy                  = data.aws_iam_policy_document.kms_key_policy.json
+  enable_key_rotation     = var.kms_key_rotation
 }
 
 resource "aws_cloudtrail" "lacework_cloudtrail" {
