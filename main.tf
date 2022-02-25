@@ -23,7 +23,7 @@ locals {
     length(var.iam_role_name) > 0 ? var.iam_role_name : "${var.prefix}-iam-${random_id.uniq.hex}"
   )
   mfa_delete                = var.bucket_enable_versioning && var.bucket_enable_mfa_delete
-  bucket_encryption_enabled = var.bucket_enable_encryption && var.bucket_encryption_enabled
+  bucket_encryption_enabled = var.bucket_enable_encryption && var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
   bucket_logs_enabled       = var.bucket_logs_enabled && var.bucket_enable_logs
   bucket_versioning_enabled = var.bucket_enable_versioning && var.bucket_versioning_enabled
   bucket_sse_key_arn        = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
@@ -66,7 +66,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   }
 
   dynamic "logging" {
-    for_each = local.bucket_logs_enabled == true ? [1] : []
+    for_each = local.bucket_logs_enabled ? [1] : []
     content {
       target_bucket = local.log_bucket_name
       target_prefix = var.access_log_prefix
@@ -74,7 +74,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   }
 
   dynamic "server_side_encryption_configuration" {
-    for_each = local.bucket_encryption_enabled == true ? [1] : []
+    for_each = local.bucket_encryption_enabled ? [1] : []
     content {
       rule {
         apply_server_side_encryption_by_default {
@@ -100,7 +100,7 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
   }
 
   dynamic "server_side_encryption_configuration" {
-    for_each = local.bucket_encryption_enabled == true ? [1] : []
+    for_each = local.bucket_encryption_enabled ? [1] : []
     content {
       rule {
         apply_server_side_encryption_by_default {
@@ -341,7 +341,7 @@ data "aws_iam_policy_document" "cross_account_policy" {
   }
 
   dynamic "statement" {
-    for_each = local.bucket_encryption_enabled == true ? (var.bucket_sse_algorithm == "aws:kms" ? [1] : []) : []
+    for_each = local.bucket_encryption_enabled && var.bucket_sse_algorithm == "aws:kms" ? [1] : []
     content {
       sid       = "DecryptLogFiles"
       actions   = ["kms:Decrypt"]
@@ -350,7 +350,7 @@ data "aws_iam_policy_document" "cross_account_policy" {
   }
 
   dynamic "statement" {
-    for_each = var.sqs_encryption_enabled == true ? [1] : []
+    for_each = var.sqs_encryption_enabled ? [1] : []
     content {
       sid       = "DecryptQueueFiles"
       actions   = ["kms:Decrypt"]
