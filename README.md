@@ -23,7 +23,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | bucket_enable_mfa_delete | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | `false` | no |
 | bucket_enable_versioning | (deprecated) Use `bucket_versioning_enabled` instead | `bool` | `false` | no |
 | bucket_versioning_enabled | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | `true` | no |
-| bucket_sse_algorithm | Name of the server-side encryption algorithm to use ("AES256" or "aws:kms") | `string` | AES256 | no |
+| bucket_sse_algorithm | Name of the server-side encryption algorithm to use ("AES256" or "aws:kms") | `string` | `aws:kms` | no |
 | bucket_sse_key_arn | The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms`) | `string` | "" | no |
 | external_id_length | Length of External ID (max 1224) | `number` | 16 | no |
 | iam_role_external_id | External ID for IAM Role | `string` | "" | no |
