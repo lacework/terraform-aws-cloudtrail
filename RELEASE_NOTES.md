@@ -1,10 +1,9 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v1.0.2`.
+Another day, another release. These are the release notes for the version `v1.1.0`.
 
+## Features
+* feat: add kms_key_rotation variable to control KMS auto rotation (#69) (Philippe M. Chiasson)([1474a02](https://github.com/lacework/terraform-aws-cloudtrail/commit/1474a0215fec95a8f45ed5542fcb94122d43bb91))
 ## Bug Fixes
-* fix: bucket_encryption_enabled checks SSE Key ARN length (#71) (Salim Afiune)([40578eb](https://github.com/lacework/terraform-aws-cloudtrail/commit/40578eb2f0ff0584d476ccf100c97d84b0564a0d))
-## Documentation Updates
-* docs: update README to match bucket_sse_algorithm default (#68) (Albert Dixon)([392c3a8](https://github.com/lacework/terraform-aws-cloudtrail/commit/392c3a814ecaf7cd2e7528fd7ac18d49f67f88bd))
+* fix: aws required_provider version constraint (#74) (Salim Afiune)([ea075eb](https://github.com/lacework/terraform-aws-cloudtrail/commit/ea075eb3a0c1d2da27422cb0b9ab6301e6b4fc3a))
 ## Other Changes
-* chore: update PR template (#70) (Darren)([1ecf01b](https://github.com/lacework/terraform-aws-cloudtrail/commit/1ecf01bb7ce7ee6b78c0cc15389e8523956dd539))
-* ci: version bump to v1.0.2-dev (Lacework)([dc26bd1](https://github.com/lacework/terraform-aws-cloudtrail/commit/dc26bd1a04c2ac7751cc5bc69455858f600e921d))
+* ci: version bump to v1.0.3-dev (Lacework)([563e9a8](https://github.com/lacework/terraform-aws-cloudtrail/commit/563e9a8705c21870c39f20339ce45c793f39158c))
