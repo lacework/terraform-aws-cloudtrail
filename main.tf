@@ -77,7 +77,7 @@ resource "aws_s3_bucket_policy" "cloudtrail_bucket_policy" {
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket_encryption" {
-  count  = var.bucket_encryption_enabled ? 1 : 0
+  count  = var.bucket_encryption_enabled && !var.use_existing_cloudtrail ? 1 : 0
   bucket = aws_s3_bucket.cloudtrail_bucket[0].id
   rule {
     apply_server_side_encryption_by_default {
