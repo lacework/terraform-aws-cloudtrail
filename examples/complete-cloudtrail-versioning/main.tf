@@ -7,6 +7,6 @@ provider "aws" {
 module "aws_cloudtrail" {
   source = "../../"
 
-  bucket_enable_mfa_delete = true
-  bucket_enable_versioning = true
+  bucket_enable_mfa_delete  = true
+  bucket_versioning_enabled = true
 }

@@ -70,22 +70,10 @@ variable "bucket_arn" {
   description = "The S3 bucket ARN is required when setting use_existing_cloudtrail to true"
 }
 
-variable "bucket_enable_encryption" {
-  type        = bool
-  default     = true
-  description = "(deprecated) Use `bucket_encryption_enabled` instead"
-}
-
 variable "bucket_encryption_enabled" {
   type        = bool
   default     = true
   description = "Set this to `true` to enable encryption on a created S3 bucket"
-}
-
-variable "bucket_enable_logs" {
-  type        = bool
-  default     = true
-  description = "(deprecated) Use `bucket_logs_enabled` instead"
 }
 
 variable "bucket_logs_enabled" {
@@ -98,12 +86,6 @@ variable "bucket_enable_mfa_delete" {
   type        = bool
   default     = false
   description = "Set this to `true` to require MFA for object deletion (Requires versioning)"
-}
-
-variable "bucket_enable_versioning" {
-  type        = bool
-  default     = true
-  description = "(deprecated) Use `bucket_versioning_enabled` instead"
 }
 
 variable "bucket_versioning_enabled" {

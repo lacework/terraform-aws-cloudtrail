@@ -7,7 +7,7 @@ This example creates a new CloudTrail with versioning and MFA deletion enabled.
 | Name                       | Description                                                                 | Type   |
 | -------------------------- | --------------------------------------------------------------------------- | ------ |
 | `bucket_enable_mfa_delete` | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` |
-| `bucket_enable_versioning` | Set this to `true` to enable access versioning on a created S3 bucket       | `bool` |
+| `bucket_versioning_enabled` | Set this to `true` to enable access versioning on a created S3 bucket       | `bool` |
 
 ## Sample Code
 
@@ -22,8 +22,8 @@ module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
   version = "~> 1.0"
 
-  bucket_enable_mfa_delete = true
-  bucket_enable_versioning = true
+  bucket_enable_mfa_delete  = true
+  bucket_versioning_enabled = true
 }
 ```
 

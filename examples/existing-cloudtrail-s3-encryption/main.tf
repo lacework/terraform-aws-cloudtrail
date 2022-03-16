@@ -9,11 +9,11 @@ module "aws_cloudtrail" {
   version = "~> 1.0"
 
   # Use an existing CloudTrail
-  use_existing_cloudtrail  = true
-  bucket_arn               = "arn:aws:s3:::lacework-ct-bucket-8805c0bf"
-  bucket_enable_encryption = true
-  bucket_sse_algorithm     = "aws:kms"
-  bucket_sse_key_arn       = "arn:aws:kms:us-west-2:123456789012:key/6e2010aa-27e4-49c6-8887-956abc1caeb9"
+  use_existing_cloudtrail   = true
+  bucket_arn                = "arn:aws:s3:::lacework-ct-bucket-8805c0bf"
+  bucket_encryption_enabled = true
+  bucket_sse_algorithm      = "aws:kms"
+  bucket_sse_key_arn        = "arn:aws:kms:us-west-2:123456789012:key/6e2010aa-27e4-49c6-8887-956abc1caeb9"
 
   # Use an existing SNS Topic
   use_existing_sns_topic = true

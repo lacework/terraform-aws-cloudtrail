@@ -22,10 +22,9 @@ locals {
   iam_role_name = var.use_existing_iam_role ? var.iam_role_name : (
     length(var.iam_role_name) > 0 ? var.iam_role_name : "${var.prefix}-iam-${random_id.uniq.hex}"
   )
-  mfa_delete                = var.bucket_enable_versioning && var.bucket_enable_mfa_delete
-  bucket_encryption_enabled = var.bucket_enable_encryption && var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
-  bucket_logs_enabled       = var.bucket_logs_enabled && var.bucket_enable_logs
-  bucket_versioning_enabled = var.bucket_enable_versioning && var.bucket_versioning_enabled
+  mfa_delete                = var.bucket_versioning_enabled && var.bucket_enable_mfa_delete ? "Enabled" : "Disabled"
+  bucket_encryption_enabled = var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
+  bucket_versioning_enabled = var.bucket_versioning_enabled ? "Enabled" : "Suspended"
   bucket_sse_key_arn        = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
 }
 
@@ -59,61 +58,78 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   count         = var.use_existing_cloudtrail ? 0 : 1
   bucket        = local.bucket_name
   force_destroy = var.bucket_force_destroy
-  policy        = data.aws_iam_policy_document.cloudtrail_s3_policy.json
+  tags          = var.tags
+}
 
-  versioning {
-    enabled    = local.bucket_versioning_enabled
+// v4 s3 bucket changes
+resource "aws_s3_bucket_logging" "cloudtrail_bucket_logging" {
+  count         = var.bucket_logs_enabled && !var.use_existing_cloudtrail ? 1 : 0
+  bucket        = aws_s3_bucket.cloudtrail_bucket[0].id
+  target_bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  target_prefix = var.access_log_prefix
+}
+
+resource "aws_s3_bucket_policy" "cloudtrail_bucket_policy" {
+  count  = var.use_existing_cloudtrail ? 0 : 1
+  bucket = aws_s3_bucket.cloudtrail_bucket[0].id
+  policy = data.aws_iam_policy_document.cloudtrail_s3_policy.json
+}
+
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_bucket_encryption" {
+  count  = var.bucket_encryption_enabled && !var.use_existing_cloudtrail ? 1 : 0
+  bucket = aws_s3_bucket.cloudtrail_bucket[0].id
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = local.bucket_sse_key_arn
+      sse_algorithm     = var.bucket_sse_algorithm
+    }
+  }
+}
+
+resource "aws_s3_bucket_versioning" "cloudtrail_bucket_versioning" {
+  count  = var.bucket_logs_enabled && !var.use_existing_cloudtrail ? 1 : 0
+  bucket = aws_s3_bucket.cloudtrail_bucket[0].id
+  versioning_configuration {
+    status     = local.bucket_versioning_enabled
     mfa_delete = local.mfa_delete
   }
-
-  dynamic "logging" {
-    for_each = local.bucket_logs_enabled ? [1] : []
-    content {
-      target_bucket = local.log_bucket_name
-      target_prefix = var.access_log_prefix
-    }
-  }
-
-  dynamic "server_side_encryption_configuration" {
-    for_each = local.bucket_encryption_enabled ? [1] : []
-    content {
-      rule {
-        apply_server_side_encryption_by_default {
-          kms_master_key_id = local.bucket_sse_key_arn
-          sse_algorithm     = var.bucket_sse_algorithm
-        }
-      }
-    }
-  }
-
-  tags = var.tags
 }
 
 resource "aws_s3_bucket" "cloudtrail_log_bucket" {
-  count         = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (local.bucket_logs_enabled ? 1 : 0)
+  count         = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
   bucket        = local.log_bucket_name
   force_destroy = var.bucket_force_destroy
-  acl           = "log-delivery-write"
+  tags          = var.tags
+}
 
-  versioning {
-    enabled    = local.bucket_versioning_enabled
+// v4 s3 log bucket changes
+resource "aws_s3_bucket_acl" "cloudtrail_log_bucket_acl" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  acl    = "log-delivery-write"
+}
+
+
+resource "aws_s3_bucket_versioning" "cloudtrail_log_bucket_versioning" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  versioning_configuration {
+    status     = local.bucket_versioning_enabled
     mfa_delete = local.mfa_delete
   }
+}
 
-  dynamic "server_side_encryption_configuration" {
-    for_each = local.bucket_encryption_enabled ? [1] : []
-    content {
-      rule {
-        apply_server_side_encryption_by_default {
-          kms_master_key_id = local.bucket_sse_key_arn
-          sse_algorithm     = var.bucket_sse_algorithm
-        }
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "cloudtrail_log_encryption" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  rule {
+    apply_server_side_encryption_by_default {
+      kms_master_key_id = local.bucket_sse_key_arn
+      sse_algorithm     = var.bucket_sse_algorithm
     }
   }
-
-  tags = var.tags
 }
+
 
 # we need the identity of the caller to get their account_id for the s3 bucket
 data "aws_caller_identity" "current" {}

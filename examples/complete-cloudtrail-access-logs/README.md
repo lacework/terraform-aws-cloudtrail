@@ -6,7 +6,7 @@ This example creates a new CloudTrail and the required resources to support it, 
 
 | Name                 | Description                                                        | Type   |
 | -------------------- | ------------------------------------------------------------------ | ------ |
-| `bucket_enable_logs` | Set this to `true` to enable access logging on a created S3 bucket | `bool` |
+| `bucket_logs_enabled` | Set this to `true` to enable access logging on a created S3 bucket | `bool` |
 
 ## Sample Code
 
@@ -21,7 +21,7 @@ module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
   version = "~> 1.0"
 
-  bucket_enable_logs = true
+  bucket_logs_enabled = true
 }
 ```
 
