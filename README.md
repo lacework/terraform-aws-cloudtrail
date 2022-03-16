@@ -16,6 +16,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | bucket_force_destroy | Force destroy bucket (Required when bucket not empty) | `bool` | `false` | no |
 | bucket_name | Optional value to specify name for a newly created S3 bucket. Not required when `use_existing_cloudtrail` is true. | `string` | "" | no |
 | bucket_arn | The S3 bucket ARN is required only when setting `use_existing_cloudtrail` to true | `string` | "" | no |
+| bucket_enable_encryption | Set this to `true` to enable encryption on a created S3 bucket | `bool` | `true` | no |
 | bucket_logs_enabled | Set this to `true` to enable access logging on a created S3 bucket | `bool` | `true` | no |
 | bucket_enable_mfa_delete | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | `false` | no |
 | bucket_versioning_enabled | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | `true` | no |

@@ -76,12 +76,6 @@ variable "bucket_encryption_enabled" {
   description = "Set this to `true` to enable encryption on a created S3 bucket"
 }
 
-variable "bucket_enable_logs" {
-  type        = bool
-  default     = true
-  description = "(deprecated) Use `bucket_logs_enabled` instead"
-}
-
 variable "bucket_logs_enabled" {
   type        = bool
   default     = true
@@ -92,12 +86,6 @@ variable "bucket_enable_mfa_delete" {
   type        = bool
   default     = false
   description = "Set this to `true` to require MFA for object deletion (Requires versioning)"
-}
-
-variable "bucket_enable_versioning" {
-  type        = bool
-  default     = true
-  description = "(deprecated) Use `bucket_versioning_enabled` instead"
 }
 
 variable "bucket_versioning_enabled" {
