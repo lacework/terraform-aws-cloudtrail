@@ -7,5 +7,5 @@ provider "aws" {
 module "aws_cloudtrail" {
   source = "../../"
 
-  bucket_enable_logs = true
+  bucket_logs_enabled = true
 }

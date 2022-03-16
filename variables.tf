@@ -70,12 +70,6 @@ variable "bucket_arn" {
   description = "The S3 bucket ARN is required when setting use_existing_cloudtrail to true"
 }
 
-variable "bucket_enable_encryption" {
-  type        = bool
-  default     = true
-  description = "(deprecated) Use `bucket_encryption_enabled` instead"
-}
-
 variable "bucket_encryption_enabled" {
   type        = bool
   default     = true
