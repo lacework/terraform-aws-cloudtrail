@@ -46,6 +46,7 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   count                      = var.use_existing_cloudtrail ? 0 : 1
   name                       = var.cloudtrail_name
   is_multi_region_trail      = true
+  is_organization_trail      = var.is_organization_trail
   s3_bucket_name             = local.bucket_name
   kms_key_id                 = local.bucket_sse_key_arn
   sns_topic_name             = local.sns_topic_arn

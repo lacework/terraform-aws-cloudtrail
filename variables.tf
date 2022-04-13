@@ -4,6 +4,12 @@ variable "consolidated_trail" {
   description = "Set this to true to configure a consolidated cloudtrail"
 }
 
+variable "is_organization_trail" {
+  type        = bool
+  default     = false
+  description = "Whether the trail is an AWS Organizations trail. Organization trails log events for the master account and all member accounts. Can only be created in the organization master account"
+}
+
 variable "org_account_mappings" {
   type = list(object({
     default_lacework_account = string
