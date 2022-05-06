@@ -10,9 +10,9 @@ locals {
   sqs_queue_name     = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
   sqs_queue_key_arn  = var.sqs_encryption_enabled ? (length(var.sqs_encryption_key_arn) > 0 ? var.sqs_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
   create_kms_key = (
-    (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0)
-    || (var.sns_topic_encryption_enabled && length(var.sns_topic_encryption_key_arn) == 0)
-    || (var.sqs_encryption_enabled && length(var.sqs_encryption_key_arn) == 0)
+    (!var.use_existing_cloudtrail ? length(var.bucket_sse_key_arn) == 0 : false)
+    || (var.sns_topic_encryption_enabled ? length(var.sns_topic_encryption_key_arn) == 0 : false)
+    || (var.sqs_encryption_enabled ? length(var.sqs_encryption_key_arn) == 0 : false)
   ) ? 1 : 0
   cross_account_policy_name = (
     length(var.cross_account_policy_name) > 0 ? var.cross_account_policy_name : "${var.prefix}-cross-acct-policy-${random_id.uniq.hex}"
