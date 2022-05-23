@@ -11,7 +11,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.12.31 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
 | <a name="requirement_lacework"></a> [lacework](#requirement\_lacework) | ~> 0.2 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.1 |
