@@ -130,6 +130,23 @@ variable "access_log_prefix" {
   description = "Optional value to specify a key prefix for access log objects for logging S3 bucket"
 }
 
+variable "s3_notification_log_prefix" {
+  type        = string
+  default     = "AWSLogs/"
+  description = "The object prefix for which to create S3 notifications"
+}
+
+variable "s3_notification_type" {
+  type        = string
+  default     = "SQS"
+  description = "The destination type that should be used for S3 notifications: SNS or SQS"
+
+  validation {
+    condition     = contains(["SNS", "SQS"], var.s3_notification_type)
+    error_message = "Valid values for variable 's3_notification_type' are: ['SNS', 'SQS']."
+  }
+}
+
 variable "sns_topic_arn" {
   type        = string
   default     = ""
@@ -170,6 +187,12 @@ variable "sqs_encryption_key_arn" {
   type        = string
   default     = ""
   description = "The ARN of the KMS encryption key to be used for SQS (Required when `sqs_encryption_enabled` is `true`)"
+}
+
+variable "use_s3_bucket_notification" {
+  type        = bool
+  default     = false
+  description = "Set this to true to use S3 bucket notifications, rather than CloudTrail. Default behavior uses CloudTrail"
 }
 
 variable "use_existing_cloudtrail" {
