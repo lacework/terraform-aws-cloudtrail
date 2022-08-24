@@ -97,7 +97,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_org_account_mappings"></a> [org\_account\_mappings](#input\_org\_account\_mappings) | Mapping of AWS accounts to Lacework accounts within a Lacework organization | <pre>list(object({<br>    default_lacework_account = string<br>    mapping = list(object({<br>      lacework_account = string<br>      aws_accounts     = list(string)<br>    }))<br>  }))</pre> | `[]` | no |
 | <a name="input_prefix"></a> [prefix](#input\_prefix) | The prefix that will be use at the beginning of every generated resource | `string` | `"lacework-ct"` | no |
 | <a name="input_s3_notification_log_prefix"></a> [s3\_notification\_log\_prefix](#input\_s3\_notification\_log\_prefix) | The object prefix for which to create S3 notifications | `string` | `"AWSLogs/"` | no |
-| <a name="input_s3_notification_type"></a> [s3\_notification\_type](#input\_s3\_notification\_type) | The destination type that should be used for S3 notifications: SNS or SQS | `string` | `"SQS"` | no |
+| <a name="input_s3_notification_type"></a> [s3\_notification\_type](#input\_s3\_notification\_type) | The destination type that should be used for S3 notifications: `SNS` or `SQS`. Defaults to `SQS` | `string` | `"SQS"` | no |
 | <a name="input_sns_topic_arn"></a> [sns\_topic\_arn](#input\_sns\_topic\_arn) | The SNS topic ARN | `string` | `""` | no |
 | <a name="input_sns_topic_encryption_enabled"></a> [sns\_topic\_encryption\_enabled](#input\_sns\_topic\_encryption\_enabled) | Set this to `false` to disable encryption on a sns topic. Defaults to true | `bool` | `true` | no |
 | <a name="input_sns_topic_encryption_key_arn"></a> [sns\_topic\_encryption\_key\_arn](#input\_sns\_topic\_encryption\_key\_arn) | The ARN of an existing KMS encryption key to be used for SNS | `string` | `""` | no |
@@ -111,7 +111,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_use_existing_cloudtrail"></a> [use\_existing\_cloudtrail](#input\_use\_existing\_cloudtrail) | Set this to true to use an existing cloudtrail. Default behavior enables new cloudtrail | `bool` | `false` | no |
 | <a name="input_use_existing_iam_role"></a> [use\_existing\_iam\_role](#input\_use\_existing\_iam\_role) | Set this to true to use an existing IAM role | `bool` | `false` | no |
 | <a name="input_use_existing_sns_topic"></a> [use\_existing\_sns\_topic](#input\_use\_existing\_sns\_topic) | Set this to true to use an existing SNS topic. Default behavior creates a new SNS topic | `bool` | `false` | no |
-| <a name="input_use_s3_bucket_notification"></a> [use\_s3\_bucket\_notification](#input\_use\_s3\_bucket\_notification) | Set this to true to use S3 bucket notifications, rather than CloudTrail. Default behavior uses CloudTrail | `bool` | `false` | no |
+| <a name="input_use_s3_bucket_notification"></a> [use\_s3\_bucket\_notification](#input\_use\_s3\_bucket\_notification) | Set this to `true` to use S3 bucket notifications instead of CloudTrail. When set to `false` CloudTrail will be used. Defaults to `false` | `bool` | `false` | no |
 | <a name="input_wait_time"></a> [wait\_time](#input\_wait\_time) | Amount of time to wait before the next resource is provisioned. | `string` | `"10s"` | no |
 
 ## Outputs
