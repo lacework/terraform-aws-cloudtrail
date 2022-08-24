@@ -4,11 +4,17 @@ locals {
   split_bucket_arn   = var.use_existing_cloudtrail ? split(":", local.trimmed_bucket_arn) : []
   bucket_name        = var.use_existing_cloudtrail ? element(local.split_bucket_arn, (length(local.split_bucket_arn) - 1)) : (length(var.bucket_name) > 0 ? var.bucket_name : "${var.prefix}-bucket-${random_id.uniq.hex}")
   log_bucket_name    = length(var.log_bucket_name) > 0 ? var.log_bucket_name : "${local.bucket_name}-access-logs"
-  sns_topic_name     = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
-  sns_topic_arn      = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn
-  sns_topic_key_arn  = var.sns_topic_encryption_enabled ? (length(var.sns_topic_encryption_key_arn) > 0 ? var.sns_topic_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
-  sqs_queue_name     = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
-  sqs_queue_key_arn  = var.sqs_encryption_enabled ? (length(var.sqs_encryption_key_arn) > 0 ? var.sqs_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
+  create_sns_topic = var.use_s3_bucket_notification ? var.s3_notification_type == "SNS" : (
+    (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? false : true
+  )
+  sns_topic_name = length(var.sns_topic_name) > 0 ? var.sns_topic_name : "${var.prefix}-sns-${random_id.uniq.hex}"
+  sns_topic_arn = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? var.sns_topic_arn : (
+    local.create_sns_topic ? aws_sns_topic.lacework_cloudtrail_sns_topic[0].arn : ""
+  )
+  sns_topic_key_arn = var.sns_topic_encryption_enabled ? (length(var.sns_topic_encryption_key_arn) > 0 ? var.sns_topic_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
+  sqs_queue_name    = length(var.sqs_queue_name) > 0 ? var.sqs_queue_name : "${var.prefix}-sqs-${random_id.uniq.hex}"
+  sqs_queue_key_arn = var.sqs_encryption_enabled ? (length(var.sqs_encryption_key_arn) > 0 ? var.sqs_encryption_key_arn : aws_kms_key.lacework_kms_key[0].arn) : ""
+  sqs_source_arn    = (var.use_s3_bucket_notification && var.s3_notification_type == "SQS") ? local.bucket_arn : local.sns_topic_arn
   create_kms_key = (
     (!var.use_existing_cloudtrail ? length(var.bucket_sse_key_arn) == 0 : false)
     || (var.sns_topic_encryption_enabled ? length(var.sns_topic_encryption_key_arn) == 0 : false)
@@ -49,7 +55,7 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   is_organization_trail      = var.is_organization_trail
   s3_bucket_name             = local.bucket_name
   kms_key_id                 = local.bucket_sse_key_arn
-  sns_topic_name             = local.sns_topic_arn
+  sns_topic_name             = var.use_s3_bucket_notification ? null : local.sns_topic_arn
   tags                       = var.tags
   enable_log_file_validation = var.enable_log_file_validation
   depends_on                 = [aws_s3_bucket.cloudtrail_bucket]
@@ -68,6 +74,34 @@ resource "aws_s3_bucket_logging" "cloudtrail_bucket_logging" {
   bucket        = aws_s3_bucket.cloudtrail_bucket[0].id
   target_bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
   target_prefix = var.access_log_prefix
+}
+
+resource "aws_s3_bucket_notification" "cloudtrail_bucket_notification" {
+  count  = var.use_s3_bucket_notification ? 1 : 0
+  bucket = local.bucket_name
+
+  dynamic "queue" {
+    for_each = (var.s3_notification_type == "SQS") ? [1] : []
+    content {
+      queue_arn     = aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn
+      events        = ["s3:ObjectCreated:*"]
+      filter_prefix = var.s3_notification_log_prefix
+    }
+  }
+
+  dynamic "topic" {
+    for_each = (var.s3_notification_type == "SNS") ? [1] : []
+    content {
+      topic_arn     = local.sns_topic_arn
+      events        = ["s3:ObjectCreated:*"]
+      filter_prefix = var.s3_notification_log_prefix
+    }
+  }
+
+  depends_on = [
+    aws_sns_topic_policy.default,
+    aws_sqs_queue_policy.lacework_sqs_queue_policy,
+  ]
 }
 
 resource "aws_s3_bucket_policy" "cloudtrail_bucket_policy" {
@@ -162,6 +196,30 @@ data "aws_iam_policy_document" "kms_key_policy" {
       principals {
         type        = "Service"
         identifiers = ["cloudtrail.amazonaws.com"]
+      }
+
+      actions   = ["kms:GenerateDataKey*", "kms:Decrypt"]
+      resources = ["*"]
+    }
+  }
+
+  dynamic "statement" {
+    for_each = var.use_s3_bucket_notification ? [1] : []
+    content {
+      sid    = "Allow S3 bucket to encrypt/decrypt"
+      effect = "Allow"
+
+      principals {
+        type        = "Service"
+        identifiers = ["s3.amazonaws.com"]
+      }
+
+      condition {
+        test     = "ArnEquals"
+        variable = "aws:SourceArn"
+        values = [
+          local.bucket_arn
+        ]
       }
 
       actions   = ["kms:GenerateDataKey*", "kms:Decrypt"]
@@ -285,30 +343,57 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
 }
 
 resource "aws_sns_topic" "lacework_cloudtrail_sns_topic" {
-  count             = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
+  count             = local.create_sns_topic ? 1 : 0
   name              = local.sns_topic_name
   tags              = var.tags
   kms_master_key_id = local.sns_topic_key_arn
 }
 
 data "aws_iam_policy_document" "sns_topic_policy" {
+  count   = local.create_sns_topic ? 1 : 0
   version = "2012-10-17"
-  statement {
-    actions   = ["SNS:Publish"]
-    sid       = "AWSCloudTrailSNSPolicy20131101"
-    resources = [local.sns_topic_arn]
 
-    principals {
-      type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
+  dynamic "statement" {
+    for_each = !var.use_s3_bucket_notification ? [1] : []
+    content {
+      actions   = ["SNS:Publish"]
+      sid       = "AWSCloudTrailSNSPolicy20131101"
+      resources = [local.sns_topic_arn]
+
+      principals {
+        type        = "Service"
+        identifiers = ["cloudtrail.amazonaws.com"]
+      }
+    }
+  }
+
+  dynamic "statement" {
+    for_each = (var.use_s3_bucket_notification && var.s3_notification_type == "SNS") ? [1] : []
+    content {
+      actions   = ["SNS:Publish"]
+      sid       = "AllowCloudTrailS3ToPublishMessage"
+      resources = [local.sns_topic_arn]
+
+      condition {
+        test     = "ArnEquals"
+        variable = "aws:SourceArn"
+        values = [
+          local.bucket_arn
+        ]
+      }
+
+      principals {
+        type        = "Service"
+        identifiers = ["s3.amazonaws.com"]
+      }
     }
   }
 }
 
 resource "aws_sns_topic_policy" "default" {
-  count  = (var.use_existing_cloudtrail && var.use_existing_sns_topic) ? 0 : 1
+  count  = local.create_sns_topic ? 1 : 0
   arn    = local.sns_topic_arn
-  policy = data.aws_iam_policy_document.sns_topic_policy.json
+  policy = data.aws_iam_policy_document.sns_topic_policy[0].json
 }
 
 resource "aws_sqs_queue" "lacework_cloudtrail_sqs_queue" {
@@ -334,7 +419,7 @@ resource "aws_sqs_queue_policy" "lacework_sqs_queue_policy" {
 			"Resource": "${aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn}",
 			"Condition": {
 				"ArnEquals": {
-					"aws:SourceArn": "${local.sns_topic_arn}"
+					"aws:SourceArn": "${local.sqs_source_arn}"
 				}
 			}
 		}
@@ -344,6 +429,7 @@ POLICY
 }
 
 resource "aws_sns_topic_subscription" "lacework_sns_topic_sub" {
+  count     = (var.use_s3_bucket_notification && var.s3_notification_type == "SQS") ? 0 : 1
   topic_arn = local.sns_topic_arn
   protocol  = "sqs"
   endpoint  = aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn
