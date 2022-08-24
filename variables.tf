@@ -192,7 +192,7 @@ variable "sqs_encryption_key_arn" {
 variable "use_s3_bucket_notification" {
   type        = bool
   default     = false
-  description = "Set this to true to use S3 bucket notifications, rather than CloudTrail. Default behavior uses CloudTrail"
+  description = "Set this to `true` to use S3 bucket notifications instead of CloudTrail. When set to `false` CloudTrail will be used. Defaults to `false`"
 }
 
 variable "use_existing_cloudtrail" {
