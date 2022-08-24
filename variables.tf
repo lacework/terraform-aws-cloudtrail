@@ -139,7 +139,7 @@ variable "s3_notification_log_prefix" {
 variable "s3_notification_type" {
   type        = string
   default     = "SQS"
-  description = "The destination type that should be used for S3 notifications: SNS or SQS"
+  description = "The destination type that should be used for S3 notifications: `SNS` or `SQS`. Defaults to `SQS`"
 
   validation {
     condition     = contains(["SNS", "SQS"], var.s3_notification_type)
