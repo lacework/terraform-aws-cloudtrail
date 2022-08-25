@@ -44,6 +44,6 @@ output "iam_role_arn" {
 }
 
 output "lacework_integration_guid" {
-  value       = lacework_integration_aws_ct.default[0].id
+  value       = local.lacework_integration_guid
   description = "Lacework CloudTrail Integration GUID"
 }

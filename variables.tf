@@ -130,6 +130,12 @@ variable "access_log_prefix" {
   description = "Optional value to specify a key prefix for access log objects for logging S3 bucket"
 }
 
+variable "ignore_org_account_mapping_changes" {
+  type        = bool
+  default     = false
+  description = "Set this to `true` to ignore out-of-band changes to the `org_account_mappings` state."
+}
+
 variable "s3_notification_log_prefix" {
   type        = string
   default     = "AWSLogs/"

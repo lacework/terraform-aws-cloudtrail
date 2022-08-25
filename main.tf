@@ -32,6 +32,7 @@ locals {
   bucket_encryption_enabled = var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
   bucket_versioning_enabled = var.bucket_versioning_enabled ? "Enabled" : "Suspended"
   bucket_sse_key_arn        = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
+  lacework_integration_guid = var.ignore_org_account_mapping_changes ? lacework_integration_aws_ct.ignore_mapping_changes[0].id : lacework_integration_aws_ct.default[0].id
 }
 
 resource "random_id" "uniq" {
@@ -551,7 +552,7 @@ resource "lacework_integration_aws_ct" "default" {
   // do not create a CT integration if the user provides multiple
   // SQS queues to configure, it means that they want to fan-out
   // with a lambda function that acks like a gateway
-  count     = length(var.sqs_queues) > 0 ? 0 : 1
+  count     = (!var.ignore_org_account_mapping_changes && length(var.sqs_queues) == 0) ? 1 : 0
   name      = var.lacework_integration_name
   queue_url = aws_sqs_queue.lacework_cloudtrail_sqs_queue.id
   credentials {
@@ -572,6 +573,42 @@ resource "lacework_integration_aws_ct" "default" {
         }
       }
     }
+  }
+
+  depends_on = [time_sleep.wait_time]
+}
+
+resource "lacework_integration_aws_ct" "ignore_mapping_changes" {
+  // do not create a CT integration if the user provides multiple
+  // SQS queues to configure, it means that they want to fan-out
+  // with a lambda function that acks like a gateway
+  count     = (var.ignore_org_account_mapping_changes && length(var.sqs_queues) == 0) ? 1 : 0
+  name      = var.lacework_integration_name
+  queue_url = aws_sqs_queue.lacework_cloudtrail_sqs_queue.id
+  credentials {
+    role_arn    = local.iam_role_arn
+    external_id = local.iam_role_external_id
+  }
+
+  dynamic "org_account_mappings" {
+    for_each = var.org_account_mappings
+    content {
+      default_lacework_account = org_account_mappings.value["default_lacework_account"]
+
+      dynamic "mapping" {
+        for_each = org_account_mappings.value["mapping"]
+        content {
+          lacework_account = mapping.value["lacework_account"]
+          aws_accounts     = mapping.value["aws_accounts"]
+        }
+      }
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      org_account_mappings
+    ]
   }
 
   depends_on = [time_sleep.wait_time]
