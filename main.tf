@@ -28,6 +28,7 @@ locals {
   iam_role_name = var.use_existing_iam_role ? var.iam_role_name : (
     length(var.iam_role_name) > 0 ? var.iam_role_name : "${var.prefix}-iam-${random_id.uniq.hex}"
   )
+  lacework_integration_guid = var.create_lacework_integration && length(var.sqs_queues) == 0 ? lacework_integration_aws_ct.default[0].id : ""
   mfa_delete                = var.bucket_versioning_enabled && var.bucket_enable_mfa_delete ? "Enabled" : "Disabled"
   bucket_encryption_enabled = var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
   bucket_versioning_enabled = var.bucket_versioning_enabled ? "Enabled" : "Suspended"
@@ -551,7 +552,7 @@ resource "lacework_integration_aws_ct" "default" {
   // do not create a CT integration if the user provides multiple
   // SQS queues to configure, it means that they want to fan-out
   // with a lambda function that acks like a gateway
-  count     = length(var.sqs_queues) > 0 ? 0 : 1
+  count     = var.create_lacework_integration && length(var.sqs_queues) == 0 ? 1 : 0
   name      = var.lacework_integration_name
   queue_url = aws_sqs_queue.lacework_cloudtrail_sqs_queue.id
   credentials {

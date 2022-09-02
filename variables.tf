@@ -1,3 +1,9 @@
+variable "create_lacework_integration" {
+  type        = bool
+  default     = true
+  description = "Set this to `false` if you don't want the module to automatically create a corresponding Lacework integration."
+}
+
 variable "consolidated_trail" {
   type        = bool
   default     = false
