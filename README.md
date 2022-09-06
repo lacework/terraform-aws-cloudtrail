@@ -81,6 +81,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_bucket_versioning_enabled"></a> [bucket\_versioning\_enabled](#input\_bucket\_versioning\_enabled) | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | `true` | no |
 | <a name="input_cloudtrail_name"></a> [cloudtrail\_name](#input\_cloudtrail\_name) | The name of the CloudTrail | `string` | `"lacework-cloudtrail"` | no |
 | <a name="input_consolidated_trail"></a> [consolidated\_trail](#input\_consolidated\_trail) | Set this to true to configure a consolidated cloudtrail | `bool` | `false` | no |
+| <a name="input_create_lacework_integration"></a> [create\_lacework\_integration](#input\_create\_lacework\_integration) | Set this to `false` if you don't want the module to automatically create a corresponding Lacework integration. | `bool` | `true` | no |
 | <a name="input_cross_account_policy_name"></a> [cross\_account\_policy\_name](#input\_cross\_account\_policy\_name) | n/a | `string` | `""` | no |
 | <a name="input_enable_log_file_validation"></a> [enable\_log\_file\_validation](#input\_enable\_log\_file\_validation) | Specifies whether cloudtrail log file integrity validation is enabled | `bool` | `true` | no |
 | <a name="input_external_id_length"></a> [external\_id\_length](#input\_external\_id\_length) | The length of the external ID to generate. Max length is 1224. Ignored when use\_existing\_iam\_role is set to true | `number` | `16` | no |
@@ -128,3 +129,4 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="output_sns_name"></a> [sns\_name](#output\_sns\_name) | SNS Topic name |
 | <a name="output_sqs_arn"></a> [sqs\_arn](#output\_sqs\_arn) | SQS Queue ARN |
 | <a name="output_sqs_name"></a> [sqs\_name](#output\_sqs\_name) | SQS Queue name |
+| <a name="output_sqs_url"></a> [sqs\_url](#output\_sqs\_url) | SQS Queue URL |

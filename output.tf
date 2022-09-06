@@ -18,6 +18,11 @@ output "sqs_arn" {
   description = "SQS Queue ARN"
 }
 
+output "sqs_url" {
+  value       = aws_sqs_queue.lacework_cloudtrail_sqs_queue.url
+  description = "SQS Queue URL"
+}
+
 output "sns_arn" {
   value       = local.sns_topic_arn
   description = "SNS Topic ARN"
@@ -44,6 +49,6 @@ output "iam_role_arn" {
 }
 
 output "lacework_integration_guid" {
-  value       = lacework_integration_aws_ct.default[0].id
+  value       = local.lacework_integration_guid
   description = "Lacework CloudTrail Integration GUID"
 }
