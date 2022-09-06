@@ -437,6 +437,7 @@ resource "aws_sns_topic_subscription" "lacework_sns_topic_sub" {
 }
 
 data "aws_iam_policy_document" "cross_account_policy" {
+  count   = var.use_existing_iam_role_policy ? 0 : 1
   version = "2012-10-17"
 
   statement {
@@ -515,9 +516,10 @@ data "aws_iam_policy_document" "cross_account_policy" {
 }
 
 resource "aws_iam_policy" "cross_account_policy" {
+  count       = var.use_existing_iam_role_policy ? 0 : 1
   name        = local.cross_account_policy_name
   description = "A cross account policy to allow Lacework to pull config and cloudtrail"
-  policy      = data.aws_iam_policy_document.cross_account_policy.json
+  policy      = data.aws_iam_policy_document.cross_account_policy[0].json
   tags        = var.tags
 }
 
@@ -532,8 +534,9 @@ module "lacework_ct_iam_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "lacework_cross_account_iam_role_policy" {
+  count      = var.use_existing_iam_role_policy ? 0 : 1
   role       = local.iam_role_name
-  policy_arn = aws_iam_policy.cross_account_policy.arn
+  policy_arn = aws_iam_policy.cross_account_policy[0].arn
   depends_on = [module.lacework_ct_iam_role]
 }
 
