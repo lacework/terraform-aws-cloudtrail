@@ -1,3 +1,10 @@
+# v2.3.0
+
+## Features
+* feat: allow Lacework integration creation to be optional (#91) (Alan Nix)([6cf6daf](https://github.com/lacework/terraform-aws-cloudtrail/commit/6cf6dafd6af0f79b58932f23ed85d5e9401a05bd))
+## Other Changes
+* ci: version bump to v2.2.1-dev (Lacework)([50d9799](https://github.com/lacework/terraform-aws-cloudtrail/commit/50d9799e9faa522ed3319278b6d3d6eaba565a86))
+---
 # v2.2.0
 
 ## Features
