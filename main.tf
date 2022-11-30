@@ -73,7 +73,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
 resource "aws_s3_bucket_logging" "cloudtrail_bucket_logging" {
   count         = var.bucket_logs_enabled && !var.use_existing_cloudtrail ? 1 : 0
   bucket        = aws_s3_bucket.cloudtrail_bucket[0].id
-  target_bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  target_bucket = var.use_existing_access_log_bucket ? local.log_bucket_name : aws_s3_bucket.cloudtrail_log_bucket[0].id
   target_prefix = var.access_log_prefix
 }
 
