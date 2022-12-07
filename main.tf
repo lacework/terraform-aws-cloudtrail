@@ -430,10 +430,12 @@ POLICY
 }
 
 resource "aws_sns_topic_subscription" "lacework_sns_topic_sub" {
-  count     = (var.use_s3_bucket_notification && var.s3_notification_type == "SQS") ? 0 : 1
-  topic_arn = local.sns_topic_arn
-  protocol  = "sqs"
-  endpoint  = aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn
+  count               = (var.use_s3_bucket_notification && var.s3_notification_type == "SQS") ? 0 : 1
+  topic_arn           = local.sns_topic_arn
+  protocol            = "sqs"
+  endpoint            = aws_sqs_queue.lacework_cloudtrail_sqs_queue.arn
+  filter_policy       = var.sns_topic_filter_policy
+  filter_policy_scope = var.sns_topic_filter_policy_scope
 }
 
 data "aws_iam_policy_document" "cross_account_policy" {
