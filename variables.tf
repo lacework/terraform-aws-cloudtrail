@@ -185,18 +185,13 @@ variable "sns_topic_encryption_enabled" {
 
 variable "sns_topic_filter_policy_scope" {
   type        = string
-  default     = "MessageBody"
+  default     = null
   description = "Whether the filter_policy applies to 'MessageAttributes' or 'MessageBody'."
-
-  validation {
-    condition     = contains(["MessageAttributes", "MessageBody"], var.sns_topic_filter_policy_scope)
-    error_message = "Valid values for variable 'sns_topic_filter_policy_scope' are: ['MessageAttributes', 'MessageBody']."
-  }
 }
 
 variable "sns_topic_filter_policy" {
   type        = string
-  default     = ""
+  default     = null
   description = "JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource. Refer to the [SNS docs](https://docs.aws.amazon.com/sns/latest/dg/message-filtering.html) for more details."
 }
 
