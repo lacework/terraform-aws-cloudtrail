@@ -1,10 +1,10 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.3.1`.
+Another day, another release. These are the release notes for the version `v2.4.0`.
 
+## Features
+* feat: add permissions_boundary variable (#103) (Victor Knell)([cc42e76](https://github.com/lacework/terraform-aws-cloudtrail/commit/cc42e765967ecaf671430ce3884580894907d052))
 ## Bug Fixes
-* fix: set lacework provider to minimum version for api v2 migration (#95) (Darren)([163f21f](https://github.com/lacework/terraform-aws-cloudtrail/commit/163f21f80425acb68ecf3159d81552494900751e))
-## Documentation Updates
-* docs: update Lacework provider version in readme (#97) (Darren)([7ae5e00](https://github.com/lacework/terraform-aws-cloudtrail/commit/7ae5e00df610e804cf89214efad1cdcdf4b0fda9))
+* fix: use valid module argument permission_boundary_arn (#106) (Salim Afiune)([e18d21c](https://github.com/lacework/terraform-aws-cloudtrail/commit/e18d21cf6e46157422837fdfb9ddd5e3907f88a3))
+* fix: handle use_existing_access_log_bucket correctly in aws_s3_bucket_logging resource (#100) (Darren)([822ecab](https://github.com/lacework/terraform-aws-cloudtrail/commit/822ecab345fa8b3a30f126baed15a78b50aa9f9b))
 ## Other Changes
-* chore: update Lacework provider version to v1 (#96) (Darren)([8ae5e97](https://github.com/lacework/terraform-aws-cloudtrail/commit/8ae5e97410a3e3327c7cdc283549a68e9647060d))
-* ci: version bump to v2.3.1-dev (Lacework)([0dc1c01](https://github.com/lacework/terraform-aws-cloudtrail/commit/0dc1c016a59ba3ab22a81cd7b1272ef50c369b38))
+* ci: version bump to v2.3.2-dev (Lacework)([8f66a97](https://github.com/lacework/terraform-aws-cloudtrail/commit/8f66a97780a34ebad64a9889025835da0f690833))
