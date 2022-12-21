@@ -528,7 +528,7 @@ module "lacework_ct_iam_role" {
   version                 = "~> 0.3"
   create                  = var.use_existing_iam_role ? false : true
   iam_role_name           = local.iam_role_name
-  permissions_boundary    = var.permission_boundary_arn
+  permission_boundary_arn = var.permission_boundary_arn
   lacework_aws_account_id = var.lacework_aws_account_id
   external_id_length      = var.external_id_length
   tags                    = var.tags
