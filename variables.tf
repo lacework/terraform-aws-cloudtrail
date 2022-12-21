@@ -58,6 +58,12 @@ variable "iam_role_external_id" {
   description = "The external ID configured inside the IAM role is required when setting use_existing_iam_role to true"
 }
 
+variable "permission_boundary_arn" {
+  type        = string
+  default     = null
+  description = "Optional - ARN of the policy that is used to set the permissions boundary for the role."
+}
+
 variable "external_id_length" {
   type        = number
   default     = 16
