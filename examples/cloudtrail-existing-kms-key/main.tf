@@ -6,7 +6,7 @@ provider "lacework" {}
 
 resource "aws_kms_key" "lacework_kms_key" {
   description  = "A KMS key used to encrypt CloudTrail logs which are monitored by Lacework"
-  policy = data.aws_iam_policy_document.kms_key_policy.json
+  policy       = data.aws_iam_policy_document.kms_key_policy.json
 }
 
 module "aws_cloudtrail" {
