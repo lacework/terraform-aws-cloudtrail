@@ -26,7 +26,7 @@ resource "aws_kms_key" "lacework_kms_key" {
 }
 
 module "aws_cloudtrail" {
-  source = "../../"
+  source = ">= 2.3.2"
 
   bucket_force_destroy         = true
   use_existing_kms_key         = true
