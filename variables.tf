@@ -28,6 +28,12 @@ variable "org_account_mappings" {
   description = "Mapping of AWS accounts to Lacework accounts within a Lacework organization"
 }
 
+variable "use_existing_kms_key" {
+  type        = bool
+  default     = false
+  description = "Set this to true to use an existing KMS key."
+}
+
 variable "use_existing_iam_role" {
   type        = bool
   default     = false

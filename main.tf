@@ -32,7 +32,7 @@ locals {
   mfa_delete                = var.bucket_versioning_enabled && var.bucket_enable_mfa_delete ? "Enabled" : "Disabled"
   bucket_encryption_enabled = var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
   bucket_versioning_enabled = var.bucket_versioning_enabled ? "Enabled" : "Suspended"
-  bucket_sse_key_arn        = (var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn
+  bucket_sse_key_arn        = var.use_existing_kms_key ? var.bucket_sse_key_arn : ((var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn)
 }
 
 resource "random_id" "uniq" {
@@ -40,7 +40,7 @@ resource "random_id" "uniq" {
 }
 
 resource "aws_kms_key" "lacework_kms_key" {
-  count                   = local.create_kms_key
+  count                   = var.use_existing_kms_key ? 0 : local.create_kms_key
   description             = "A KMS key used to encrypt CloudTrail logs which are monitored by Lacework"
   deletion_window_in_days = var.kms_key_deletion_days
   multi_region            = var.kms_key_multi_region
