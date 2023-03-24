@@ -358,8 +358,16 @@ data "aws_iam_policy_document" "sns_topic_policy" {
     for_each = !var.use_s3_bucket_notification ? [1] : []
     content {
       actions   = ["SNS:Publish"]
-      sid       = "AWSCloudTrailSNSPolicy20131101"
+      sid       = "AWSCloudTrailSNSPolicy20150319"
       resources = [local.sns_topic_arn]
+
+      effect = "Allow"
+
+      condition {
+        test = "StringEquals"
+        variable = "AWS:SourceArn"
+        values = ["arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"]
+      }
 
       principals {
         type        = "Service"
