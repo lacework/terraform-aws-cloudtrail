@@ -1,7 +1,9 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.5.0`.
+Another day, another release. These are the release notes for the version `v2.5.1`.
 
-## Features
-* feat: allow existing kms key with new cloudtrail (#102) (Darren)([77fb5e6](https://github.com/lacework/terraform-aws-cloudtrail/commit/77fb5e64deeac509358037102b63d373f4296a20))
+## Refactor
+* refactor: remove unneeded debug permissions (#109) (Darren)([101cbcd](https://github.com/lacework/terraform-aws-cloudtrail/commit/101cbcd44df14e2cab55f4252992e65dd8fe764a))
+## Bug Fixes
+* fix: SNS policy to match attach update (jon-stewart)([4d33c67](https://github.com/lacework/terraform-aws-cloudtrail/commit/4d33c67eeee3ebbd736485f9c1bd0bf539bb8d05))
 ## Other Changes
-* ci: version bump to v2.4.1-dev (Lacework)([4fff747](https://github.com/lacework/terraform-aws-cloudtrail/commit/4fff747c6306a5b2a002000f47b3729a07054418))
+* ci: version bump to v2.5.1-dev (Lacework)([fbefc5d](https://github.com/lacework/terraform-aws-cloudtrail/commit/fbefc5dd8240b7de948602ce139c23b58377e0db))
