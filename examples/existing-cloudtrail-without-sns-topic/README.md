@@ -7,12 +7,15 @@ the example named [existing-cloudtrail](https://registry.terraform.io/modules/la
 
 **IMPORTANT:** The new SNS topic must be created in the same region as the existing CloudTrail.
 
+**IMPORTANT:** The existing `cloudtrail_name` is required for the SNS Topic policy.
+
 ## Inputs
 
 | Name                      | Description                                               | Type     |
 | ------------------------- | --------------------------------------------------------- | -------- |
 | `use_existing_cloudtrail` | Set this to `true` to use an existing CloudTrail.         | `bool`   |
 | `bucket_arn`              | The S3 bucket ARN configured in the existing CloudTrail.  | `string` |
+| `cloudtrail_name`         | The name of the existing CloudTrail                       | `string` |
 
 **IMPORTANT:** This example does not modify your CloudTrail, therefore, you must enable
 SNS delivery notifications manually and point to the generated SNS topic.
@@ -41,6 +44,7 @@ module "lacework_cloudtrail" {
 
   use_existing_cloudtrail = true
   bucket_arn              = "bucket ARN from existing cloudtrail"
+  cloudtrail_name         = "lacework-cloudtrail"
 }
 ```
 
