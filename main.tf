@@ -39,6 +39,7 @@ resource "random_id" "uniq" {
   byte_length = 4
 }
 
+#tfsec:ignore:aws-kms-auto-rotate-keys customer has option of enabling
 resource "aws_kms_key" "lacework_kms_key" {
   count                   = var.use_existing_kms_key ? 0 : local.create_kms_key
   description             = "A KMS key used to encrypt CloudTrail logs which are monitored by Lacework"
@@ -67,6 +68,15 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   bucket        = local.bucket_name
   force_destroy = var.bucket_force_destroy
   tags          = var.tags
+}
+
+resource "aws_s3_bucket_public_access_block" "cloudtrail_bucket_access" {
+  count                   = var.use_existing_cloudtrail ? 0 : 1
+  bucket                  = aws_s3_bucket.cloudtrail_bucket[0].id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 // v4 s3 bucket changes
@@ -136,6 +146,15 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
   bucket        = local.log_bucket_name
   force_destroy = var.bucket_force_destroy
   tags          = var.tags
+}
+
+resource "aws_s3_bucket_public_access_block" "cloudtrail_log_bucket_access" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket                  = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
 // v4 s3 log bucket changes
