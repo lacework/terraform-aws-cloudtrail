@@ -363,10 +363,13 @@ data "aws_iam_policy_document" "sns_topic_policy" {
 
       effect = "Allow"
 
-      condition {
-        test = "StringEquals"
-        variable = "AWS:SourceArn"
-        values = ["arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"]
+      dynamic "condition" {
+        for_each = !var.consolidated_trail ? [1] : []
+        content {
+          test     = "StringEquals"
+          variable = "AWS:SourceArn"
+          values   = ["arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"]
+        }
       }
 
       principals {
