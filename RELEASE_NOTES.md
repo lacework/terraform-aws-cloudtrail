@@ -1,9 +1,7 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.5.1`.
+Another day, another release. These are the release notes for the version `v2.5.2`.
 
-## Refactor
-* refactor: remove unneeded debug permissions (#109) (Darren)([101cbcd](https://github.com/lacework/terraform-aws-cloudtrail/commit/101cbcd44df14e2cab55f4252992e65dd8fe764a))
 ## Bug Fixes
-* fix: SNS policy to match attach update (jon-stewart)([4d33c67](https://github.com/lacework/terraform-aws-cloudtrail/commit/4d33c67eeee3ebbd736485f9c1bd0bf539bb8d05))
+* fix(policy): publish to SNS from multiple trails (Salim Afiune Maya)([53fd41e](https://github.com/lacework/terraform-aws-cloudtrail/commit/53fd41eaa8eaf9e3b2b1e9d341bfc5ddced6368e))
 ## Other Changes
-* ci: version bump to v2.5.1-dev (Lacework)([fbefc5d](https://github.com/lacework/terraform-aws-cloudtrail/commit/fbefc5dd8240b7de948602ce139c23b58377e0db))
+* ci: version bump to v2.5.2-dev (Lacework)([46d6b02](https://github.com/lacework/terraform-aws-cloudtrail/commit/46d6b0236ccc8174cb350ad0729930d7a027101e))
