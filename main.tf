@@ -69,6 +69,15 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   tags          = var.tags
 }
 
+resource "aws_s3_bucket_ownership_controls" "cloudtrail_bucket_ownership_controls" {
+  count  = var.use_existing_cloudtrail ? 0 : 1
+  bucket = aws_s3_bucket.cloudtrail_bucket[0].id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
+}
+
 // v4 s3 bucket changes
 resource "aws_s3_bucket_logging" "cloudtrail_bucket_logging" {
   count         = var.bucket_logs_enabled && !var.use_existing_cloudtrail ? 1 : 0
@@ -136,6 +145,15 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
   bucket        = local.log_bucket_name
   force_destroy = var.bucket_force_destroy
   tags          = var.tags
+}
+
+resource "aws_s3_bucket_ownership_controls" "cloudtrail_log_bucket_ownership_controls" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 // v4 s3 log bucket changes
