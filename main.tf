@@ -70,6 +70,7 @@ resource "aws_s3_bucket" "cloudtrail_bucket" {
   tags          = var.tags
 }
 
+
 resource "aws_s3_bucket_public_access_block" "cloudtrail_bucket_access" {
   count                   = var.use_existing_cloudtrail ? 0 : 1
   bucket                  = aws_s3_bucket.cloudtrail_bucket[0].id
@@ -77,6 +78,15 @@ resource "aws_s3_bucket_public_access_block" "cloudtrail_bucket_access" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "cloudtrail_bucket_ownership_controls" {
+  count  = var.use_existing_cloudtrail ? 0 : 1
+  bucket = aws_s3_bucket.cloudtrail_bucket[0].id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 // v4 s3 bucket changes
@@ -148,6 +158,7 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
   tags          = var.tags
 }
 
+
 resource "aws_s3_bucket_public_access_block" "cloudtrail_log_bucket_access" {
   count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
   bucket                  = aws_s3_bucket.cloudtrail_log_bucket[0].id
@@ -155,6 +166,15 @@ resource "aws_s3_bucket_public_access_block" "cloudtrail_log_bucket_access" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_ownership_controls" "cloudtrail_log_bucket_ownership_controls" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+
+  rule {
+    object_ownership = "ObjectWriter"
+  }
 }
 
 // v4 s3 log bucket changes
