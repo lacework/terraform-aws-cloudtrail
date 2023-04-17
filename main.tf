@@ -59,6 +59,21 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   sns_topic_name             = var.use_s3_bucket_notification ? null : local.sns_topic_arn
   tags                       = var.tags
   enable_log_file_validation = var.enable_log_file_validation
+
+  dynamic "event_selector" {
+    for_each = var.enable_cloudtrail_s3_management_events ? [1] : []
+    # If enable_cloudtrail_s3_management_events is enabled, create one of the below
+    # blocks. Otherwise, create zero of the below blocks.
+    content {
+      read_write_type           = "All"
+      include_management_events = true
+      
+      data_resource {
+        type   = "AWS::S3::Object"
+        values = ["${aws_s3_bucket.cloudtrail_bucket[0].arn}/*"]
+      }
+    }
+  }
   depends_on                 = [aws_s3_bucket.cloudtrail_bucket]
 }
 
