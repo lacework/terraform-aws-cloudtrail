@@ -6,7 +6,7 @@ This example adds a dynamic event selector in order to enable Object-level loggi
 
 | Name                                     | Description                                                        | Type   |
 | ---------------------------------------- | ------------------------------------------------------------------ | ------ |
-| `enable_cloudtrail_s3_management_events` | Set this to `true` to enable access logging on a created S3 bucket | `bool` |
+| `enable_cloudtrail_s3_management_events` | Set this to `true` to enable CloudTrail Object-level logging.      | `bool` |
 
 ## Sample Code
 
