@@ -151,6 +151,39 @@ resource "aws_s3_bucket_versioning" "cloudtrail_bucket_versioning" {
   }
 }
 
+
+data "aws_iam_policy_document" "cloudtrail_log_policy" {
+  version = "2012-10-17"
+
+  statement {
+    sid     = "ForceSSLOnlyAccess"
+    actions = ["s3:*"]
+    effect  = "Deny"
+
+    resources = [
+      "arn:aws:s3:::${local.log_bucket_name}",
+      "arn:aws:s3:::${local.log_bucket_name}/*",
+    ]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "cloudtrail_log_bucket_policy" {
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  policy = data.aws_iam_policy_document.cloudtrail_log_policy.json
+}
+
 resource "aws_s3_bucket" "cloudtrail_log_bucket" {
   count         = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
   bucket        = local.log_bucket_name
