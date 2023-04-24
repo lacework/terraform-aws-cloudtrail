@@ -13,6 +13,7 @@ TEST_CASES=(
   examples/complete-cloudtrail-unencrypted
   examples/complete-cloudtrail-versioning
   examples/complete-cloudtrail
+  examples/complete-cloudtrail-access-logs-with-object-level-logging
   examples/cloudtrail-existing-kms-key
   examples/consolidated-cloudtrail-multiple-lacework-tenants
   examples/consolidated-cloudtrail
