@@ -295,3 +295,9 @@ variable "kms_key_multi_region" {
   default     = true
   description = "Whether the KMS key is a multi-region or regional key"
 }
+
+variable "enable_cloudtrail_s3_management_events" {
+  type        = bool
+  default     = false
+  description = "Enable CloudTrail Object-level logging"
+}
