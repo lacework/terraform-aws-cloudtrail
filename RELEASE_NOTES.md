@@ -1,5 +1,5 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.5.4`.
+Another day, another release. These are the release notes for the version `v2.6.0`.
 
 ## Features
 * feat: Object-level logging (#119) (TIYZAP)([37c6bc1](https://github.com/lacework/terraform-aws-cloudtrail/commit/37c6bc152c62fb86a1d78b2a6ad0637a8122d6c8)) 
