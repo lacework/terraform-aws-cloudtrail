@@ -250,9 +250,16 @@ resource "aws_s3_bucket_acl" "cloudtrail_log_bucket_acl" {
   count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
   bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
   acl    = "log-delivery-write"
-  #depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls, aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls]
+<<<<<<< HEAD
+  depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls, aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls]
 >>>>>>> 034c2cc (add depends_on attribute to S3 bucket ACLs to account for an AWS change to disable ACLs by default.)
+<<<<<<< HEAD
 >>>>>>> 368c313 (add depends_on attribute to S3 bucket ACLs to account for an AWS change to disable ACLs by default.)
+=======
+=======
+  depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls, aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls]
+>>>>>>> 1e89e32 (Fixed a comment typo.)
+>>>>>>> fe3ca2b (Fixed a comment typo.)
 }
 
 resource "aws_s3_bucket_versioning" "cloudtrail_log_bucket_versioning" {
