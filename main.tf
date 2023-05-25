@@ -230,6 +230,7 @@ resource "aws_s3_bucket_acl" "cloudtrail_log_bucket_acl" {
   count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
   bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
   acl    = "log-delivery-write"
+  #depends_on = [aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls, aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls]
 }
 
 
