@@ -1,7 +1,7 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.7.0`.
+Another day, another release. These are the release notes for the version `v2.7.1`.
 
-## Features
-* feat: Add support for AWS provider 5.0 (#126) (Maksym Vlasov)([006c2f3](https://github.com/lacework/terraform-aws-cloudtrail/commit/006c2f3f92f882e70e5339fe8fb2038398fd4756))
+## Bug Fixes
+* fix: S3 bucket ACL dependency (jon-stewart)([2efb138](https://github.com/lacework/terraform-aws-cloudtrail/commit/2efb1383ca805f502ebc817a968a876a1d0fce61))
 ## Other Changes
-* ci: version bump to v2.6.1-dev (Lacework)([4bfe8b4](https://github.com/lacework/terraform-aws-cloudtrail/commit/4bfe8b44626683114ba10a65493d9c9002f43dbb))
+* ci: version bump to v2.7.1-dev (Lacework)([2f94426](https://github.com/lacework/terraform-aws-cloudtrail/commit/2f94426a430ad2839048b7df29a09b2187e35021))
