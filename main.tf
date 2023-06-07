@@ -227,11 +227,14 @@ resource "aws_s3_bucket_ownership_controls" "cloudtrail_log_bucket_ownership_con
 
 // v4 s3 log bucket changes
 resource "aws_s3_bucket_acl" "cloudtrail_log_bucket_acl" {
-  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
-  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
-  acl    = "log-delivery-write"
+  count      = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket     = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  acl        = "log-delivery-write"
+  depends_on = [
+    aws_s3_bucket_public_access_block.cloudtrail_log_bucket_access,
+    aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls
+  ]
 }
-
 
 resource "aws_s3_bucket_versioning" "cloudtrail_log_bucket_versioning" {
   count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
