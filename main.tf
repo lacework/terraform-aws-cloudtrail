@@ -232,7 +232,7 @@ resource "aws_s3_bucket_acl" "cloudtrail_log_bucket_acl" {
   acl        = "log-delivery-write"
   depends_on = [
     aws_s3_bucket_public_access_block.cloudtrail_log_bucket_access,
-    aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls
+    aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls
   ]
 }
 
