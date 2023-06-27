@@ -126,8 +126,8 @@ variable "bucket_versioning_enabled" {
 
 variable "bucket_force_destroy" {
   type        = bool
-  default     = false
-  description = "Force destroy bucket (Required when bucket not empty)"
+  default     = true
+  description = "Force destroy bucket (When 'false' a non-empty bucket will NOT be destroyed.)"
 }
 
 variable "bucket_sse_algorithm" {
