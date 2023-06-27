@@ -6,6 +6,4 @@ provider "lacework" {}
 
 module "aws_cloudtrail" {
   source = "../../"
-
-  bucket_force_destroy = true
 }

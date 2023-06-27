@@ -22,7 +22,7 @@ provider "aws" {
 
 module "main_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 1.0"
+  version = "~> 2.0"
   providers = {
     aws      = aws.main-account
     lacework = lacework.main-account
@@ -68,4 +68,4 @@ resource "aws_cloudtrail" "sub_account_2" {
 }
 ```
 
-For detailed information on integrating Lacework with AWS see [AWS Config and CloudTrail Integration with Terraform](https://support.lacework.com/hc/en-us/articles/360057092034-AWS-Config-and-CloudTrail-Integration-with-Terraform)
+For detailed information on integrating Lacework with AWS see [AWS Config and CloudTrail Integration with Terraform](https://docs.lacework.net/onboarding/aws-guided-configuration).

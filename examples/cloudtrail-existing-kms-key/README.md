@@ -6,7 +6,6 @@ This example creates a new CloudTrail in an AWS account with almost all of the r
 
 | Name                   | Description                                           | Type   |
 | ---------------------- | ----------------------------------------------------- | ------ |
-| `bucket_force_destroy` | Force destroy bucket (Required when bucket not empty) | `bool` |
 | `bucket_sse_key_arn` | The ARN of the KMS encryption key to be used for S3 | `string` |
 | `sns_topic_encryption_key_arn` | The ARN of an existing KMS encryption key to be used for SNS | `string` |
 | `sqs_encryption_key_arn` | The ARN of the KMS encryption key to be used for SQS | `string` |
@@ -28,7 +27,6 @@ resource "aws_kms_key" "lacework_kms_key" {
 module "aws_cloudtrail" {
   source = ">= 2.3.2"
 
-  bucket_force_destroy         = true
   use_existing_kms_key         = true
   bucket_sse_key_arn           = aws_kms_key.lacework_kms_key.arn
   sns_topic_encryption_key_arn = aws_kms_key.lacework_kms_key.arn
