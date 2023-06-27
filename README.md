@@ -75,7 +75,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_bucket_arn"></a> [bucket\_arn](#input\_bucket\_arn) | The S3 bucket ARN is required when setting use\_existing\_cloudtrail to true | `string` | `""` | no |
 | <a name="input_bucket_enable_mfa_delete"></a> [bucket\_enable\_mfa\_delete](#input\_bucket\_enable\_mfa\_delete) | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | `false` | no |
 | <a name="input_bucket_encryption_enabled"></a> [bucket\_encryption\_enabled](#input\_bucket\_encryption\_enabled) | Set this to `true` to enable encryption on a created S3 bucket | `bool` | `true` | no |
-| <a name="input_bucket_force_destroy"></a> [bucket\_force\_destroy](#input\_bucket\_force\_destroy) | Force destroy bucket (Required when bucket not empty) | `bool` | `false` | no |
+| <a name="input_bucket_force_destroy"></a> [bucket\_force\_destroy](#input\_bucket\_force\_destroy) | Force destroy bucket (if disabled, terraform will not be able do destroy non-empty bucket) | `bool` | `true` | no |
 | <a name="input_bucket_logs_enabled"></a> [bucket\_logs\_enabled](#input\_bucket\_logs\_enabled) | Set this to `true` to enable access logging on a created S3 bucket | `bool` | `true` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Optional value to specify name for a newly created S3 bucket. Not required when `use_existing_cloudtrail` is true. | `string` | `""` | no |
 | <a name="input_bucket_sse_algorithm"></a> [bucket\_sse\_algorithm](#input\_bucket\_sse\_algorithm) | The encryption algorithm to use for S3 bucket server-side encryption | `string` | `"aws:kms"` | no |
