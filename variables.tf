@@ -301,3 +301,9 @@ variable "enable_cloudtrail_s3_management_events" {
   default     = false
   description = "Enable CloudTrail Object-level logging"
 }
+
+variable "cross_account_cloudtrail_arn" {
+  type        = string
+  default     = null
+  description = "If using an existing CloudTrail in another account, provide the ARN here"
+}
