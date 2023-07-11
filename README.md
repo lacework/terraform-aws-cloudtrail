@@ -81,7 +81,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_bucket_sse_algorithm"></a> [bucket\_sse\_algorithm](#input\_bucket\_sse\_algorithm) | The encryption algorithm to use for S3 bucket server-side encryption | `string` | `"aws:kms"` | no |
 | <a name="input_bucket_sse_key_arn"></a> [bucket\_sse\_key\_arn](#input\_bucket\_sse\_key\_arn) | The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms` and using an existing aws\_kms\_key) | `string` | `""` | no |
 | <a name="input_bucket_versioning_enabled"></a> [bucket\_versioning\_enabled](#input\_bucket\_versioning\_enabled) | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | `true` | no |
-| <a name="input_cloudtrail_name"></a> [cloudtrail\_name](#input\_cloudtrail\_name) | The name of the CloudTrail | `string` | `"lacework-cloudtrail"` | no |
+| <a name="input_cloudtrail_name"></a> [cloudtrail\_name](#input\_cloudtrail\_name) | The name of the CloudTrail.  Required when setting use_existing_cloudtrail to true | `string` | `"lacework-cloudtrail"` | no |
 | <a name="input_consolidated_trail"></a> [consolidated\_trail](#input\_consolidated\_trail) | Set this to true to configure a consolidated cloudtrail | `bool` | `false` | no |
 | <a name="input_create_lacework_integration"></a> [create\_lacework\_integration](#input\_create\_lacework\_integration) | Set this to `false` if you don't want the module to automatically create a corresponding Lacework integration. | `bool` | `true` | no |
 | <a name="input_cross_account_policy_name"></a> [cross\_account\_policy\_name](#input\_cross\_account\_policy\_name) | n/a | `string` | `""` | no |

@@ -240,7 +240,7 @@ variable "use_existing_sns_topic" {
 variable "cloudtrail_name" {
   type        = string
   default     = "lacework-cloudtrail"
-  description = "The name of the CloudTrail"
+  description = "The name of the CloudTrail.  Required when setting use_existing_cloudtrail to true"
 }
 
 variable "cross_account_policy_name" {
