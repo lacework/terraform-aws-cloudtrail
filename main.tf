@@ -182,7 +182,7 @@ data "aws_iam_policy_document" "cloudtrail_log_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["*"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
 
     condition {
@@ -356,7 +356,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = ["*"]
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"]
     }
 
     actions = [
@@ -364,12 +364,6 @@ data "aws_iam_policy_document" "kms_key_policy" {
       "kms:ReEncryptFrom"
     ]
     resources = ["*"]
-
-    condition {
-      test     = "StringEquals"
-      variable = "kms:CallerAccount"
-      values   = [data.aws_caller_identity.current.account_id]
-    }
 
     condition {
       test     = "StringLike"
