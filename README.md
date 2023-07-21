@@ -127,6 +127,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 |------|-------------|
 | <a name="output_bucket_arn"></a> [bucket\_arn](#output\_bucket\_arn) | S3 Bucket ARN |
 | <a name="output_bucket_name"></a> [bucket\_name](#output\_bucket\_name) | S3 Bucket name |
+| <a name="output_bucket_sse_key_arn"></a> [bucket\_sse\_key\_arn](#output\_bucket\_sse\_key\_arn) | The ARN of the KMS encryption key used for S3 |
 | <a name="output_external_id"></a> [external\_id](#output\_external\_id) | The External ID configured into the IAM role |
 | <a name="output_iam_role_arn"></a> [iam\_role\_arn](#output\_iam\_role\_arn) | The IAM Role ARN |
 | <a name="output_iam_role_name"></a> [iam\_role\_name](#output\_iam\_role\_name) | The IAM Role name |
