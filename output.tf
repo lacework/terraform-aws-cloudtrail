@@ -52,3 +52,8 @@ output "lacework_integration_guid" {
   value       = local.lacework_integration_guid
   description = "Lacework CloudTrail Integration GUID"
 }
+
+output "bucket_sse_key_arn" {
+  value       = local.bucket_sse_key_arn
+  description = "The ARN of the KMS encryption key used for S3"
+}
