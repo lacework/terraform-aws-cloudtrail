@@ -84,6 +84,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_cloudtrail_name"></a> [cloudtrail\_name](#input\_cloudtrail\_name) | The name of the CloudTrail.  Required when setting use_existing_cloudtrail to true | `string` | `"lacework-cloudtrail"` | no |
 | <a name="input_consolidated_trail"></a> [consolidated\_trail](#input\_consolidated\_trail) | Set this to true to configure a consolidated cloudtrail | `bool` | `false` | no |
 | <a name="input_create_lacework_integration"></a> [create\_lacework\_integration](#input\_create\_lacework\_integration) | Set this to `false` if you don't want the module to automatically create a corresponding Lacework integration. | `bool` | `true` | no |
+| <a name="input_cross_account_cloudtrail_arn"></a> [cross\_account\_cloudtrail\_arn](#input\_cross\_account\_cloudtrail\_arn) | If using an existing CloudTrail in another account, provide the ARN here | `string` | `null` | no |
 | <a name="input_cross_account_policy_name"></a> [cross\_account\_policy\_name](#input\_cross\_account\_policy\_name) | n/a | `string` | `""` | no |
 | <a name="input_enable_cloudtrail_s3_management_events"></a> [enable\_cloudtrail\_s3\_management\_events](#input\_enable\_cloudtrail\_s3\_management\_events) | Enable CloudTrail Object-level logging | `bool` | `false` | no |
 | <a name="input_enable_log_file_validation"></a> [enable\_log\_file\_validation](#input\_enable\_log\_file\_validation) | Specifies whether cloudtrail log file integrity validation is enabled | `bool` | `true` | no |
