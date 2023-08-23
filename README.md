@@ -7,12 +7,13 @@
 
 Terraform module for configuring an integration with Lacework and AWS for CloudTrail analysis.
 
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
-| <a name="requirement_aws"></a> [aws](#requirement\_aws) | ~> 4.0 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0 |
 | <a name="requirement_lacework"></a> [lacework](#requirement\_lacework) | ~> 1.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.1 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.6 |
@@ -21,7 +22,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | ~> 4.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
 | <a name="provider_lacework"></a> [lacework](#provider\_lacework) | ~> 1.0 |
 | <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
 | <a name="provider_time"></a> [time](#provider\_time) | ~> 0.6 |
@@ -30,7 +31,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lacework_ct_iam_role"></a> [lacework\_ct\_iam\_role](#module\_lacework\_ct\_iam\_role) | lacework/iam-role/aws | ~> 0.1 |
+| <a name="module_lacework_ct_iam_role"></a> [lacework\_ct\_iam\_role](#module\_lacework\_ct\_iam\_role) | lacework/iam-role/aws | ~> 0.3 |
 
 ## Resources
 
@@ -42,12 +43,15 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | [aws_kms_key.lacework_kms_key](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/kms_key) | resource |
 | [aws_s3_bucket.cloudtrail_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
 | [aws_s3_bucket.cloudtrail_log_bucket](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket) | resource |
-| [aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
-| [aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
 | [aws_s3_bucket_acl.cloudtrail_log_bucket_acl](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_acl) | resource |
 | [aws_s3_bucket_logging.cloudtrail_bucket_logging](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_logging) | resource |
 | [aws_s3_bucket_notification.cloudtrail_bucket_notification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification) | resource |
+| [aws_s3_bucket_ownership_controls.cloudtrail_bucket_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
+| [aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_ownership_controls) | resource |
 | [aws_s3_bucket_policy.cloudtrail_bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
+| [aws_s3_bucket_policy.cloudtrail_log_bucket_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_policy) | resource |
+| [aws_s3_bucket_public_access_block.cloudtrail_bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
+| [aws_s3_bucket_public_access_block.cloudtrail_log_bucket_access](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_public_access_block) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.cloudtrail_bucket_encryption](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_s3_bucket_server_side_encryption_configuration.cloudtrail_log_encryption](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_s3_bucket_versioning.cloudtrail_bucket_versioning](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_versioning) | resource |
@@ -61,6 +65,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | [random_id.uniq](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_sleep.wait_time](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
+| [aws_iam_policy_document.cloudtrail_log_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.cloudtrail_s3_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.cross_account_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.kms_key_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -75,13 +80,13 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_bucket_arn"></a> [bucket\_arn](#input\_bucket\_arn) | The S3 bucket ARN is required when setting use\_existing\_cloudtrail to true | `string` | `""` | no |
 | <a name="input_bucket_enable_mfa_delete"></a> [bucket\_enable\_mfa\_delete](#input\_bucket\_enable\_mfa\_delete) | Set this to `true` to require MFA for object deletion (Requires versioning) | `bool` | `false` | no |
 | <a name="input_bucket_encryption_enabled"></a> [bucket\_encryption\_enabled](#input\_bucket\_encryption\_enabled) | Set this to `true` to enable encryption on a created S3 bucket | `bool` | `true` | no |
-| <a name="input_bucket_force_destroy"></a> [bucket\_force\_destroy](#input\_bucket\_force\_destroy) |Force destroy bucket (When 'false' a non-empty bucket will NOT be destroyed.) | `bool` | `true` | no |
+| <a name="input_bucket_force_destroy"></a> [bucket\_force\_destroy](#input\_bucket\_force\_destroy) | Force destroy bucket (When 'false' a non-empty bucket will NOT be destroyed.) | `bool` | `true` | no |
 | <a name="input_bucket_logs_enabled"></a> [bucket\_logs\_enabled](#input\_bucket\_logs\_enabled) | Set this to `true` to enable access logging on a created S3 bucket | `bool` | `true` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Optional value to specify name for a newly created S3 bucket. Not required when `use_existing_cloudtrail` is true. | `string` | `""` | no |
 | <a name="input_bucket_sse_algorithm"></a> [bucket\_sse\_algorithm](#input\_bucket\_sse\_algorithm) | The encryption algorithm to use for S3 bucket server-side encryption | `string` | `"aws:kms"` | no |
 | <a name="input_bucket_sse_key_arn"></a> [bucket\_sse\_key\_arn](#input\_bucket\_sse\_key\_arn) | The ARN of the KMS encryption key to be used for S3 (Required when `bucket_sse_algorithm` is `aws:kms` and using an existing aws\_kms\_key) | `string` | `""` | no |
 | <a name="input_bucket_versioning_enabled"></a> [bucket\_versioning\_enabled](#input\_bucket\_versioning\_enabled) | Set this to `true` to enable access versioning on a created S3 bucket | `bool` | `true` | no |
-| <a name="input_cloudtrail_name"></a> [cloudtrail\_name](#input\_cloudtrail\_name) | The name of the CloudTrail.  Required when setting use_existing_cloudtrail to true | `string` | `"lacework-cloudtrail"` | no |
+| <a name="input_cloudtrail_name"></a> [cloudtrail\_name](#input\_cloudtrail\_name) | The name of the CloudTrail.  Required when setting use\_existing\_cloudtrail to true | `string` | `"lacework-cloudtrail"` | no |
 | <a name="input_consolidated_trail"></a> [consolidated\_trail](#input\_consolidated\_trail) | Set this to true to configure a consolidated cloudtrail | `bool` | `false` | no |
 | <a name="input_create_lacework_integration"></a> [create\_lacework\_integration](#input\_create\_lacework\_integration) | Set this to `false` if you don't want the module to automatically create a corresponding Lacework integration. | `bool` | `true` | no |
 | <a name="input_cross_account_cloudtrail_arn"></a> [cross\_account\_cloudtrail\_arn](#input\_cross\_account\_cloudtrail\_arn) | If using an existing CloudTrail in another account, provide the ARN here | `string` | `null` | no |
@@ -137,3 +142,4 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="output_sqs_arn"></a> [sqs\_arn](#output\_sqs\_arn) | SQS Queue ARN |
 | <a name="output_sqs_name"></a> [sqs\_name](#output\_sqs\_name) | SQS Queue name |
 | <a name="output_sqs_url"></a> [sqs\_url](#output\_sqs\_url) | SQS Queue URL |
+<!-- END_TF_DOCS -->
