@@ -40,7 +40,7 @@ resource "aws_cloudtrail" "your_existing_trail" {
 
 module "lacework_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   use_existing_cloudtrail = true
   bucket_arn              = "bucket ARN from existing cloudtrail"

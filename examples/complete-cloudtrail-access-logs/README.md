@@ -19,7 +19,7 @@ provider "aws" {
 
 module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   bucket_logs_enabled = true
 }

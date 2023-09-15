@@ -25,7 +25,8 @@ resource "aws_kms_key" "lacework_kms_key" {
 }
 
 module "aws_cloudtrail" {
-  source = ">= 2.3.2"
+  source  = "lacework/cloudtrail/aws"
+  version = "~> 2.3"
 
   use_existing_kms_key         = true
   bucket_sse_key_arn           = aws_kms_key.lacework_kms_key.arn

@@ -23,7 +23,7 @@ provider "lacework" {}
 
 module "aws_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 1.0"
+  version = "~> 2.0"
 
   bucket_encryption_enabled    = false
   sns_topic_encryption_enabled = false

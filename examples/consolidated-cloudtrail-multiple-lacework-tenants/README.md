@@ -26,7 +26,7 @@ provider "aws" {
 
 module "main_cloudtrail" {
   source  = "lacework/cloudtrail/aws"
-  version = "~> 1.0"
+  version = "~> 2.0"
   providers = {
     aws      = aws.main-account
     lacework = lacework.main-account
