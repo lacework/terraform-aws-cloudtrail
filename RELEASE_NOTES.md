@@ -1,6 +1,8 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.7.6`.
+Another day, another release. These are the release notes for the version `v2.8.0`.
 
+## Features
+* feat: enforce External ID v2 format via iam-role module (#144) (djmctavish)([6d4a310](https://github.com/lacework/terraform-aws-cloudtrail/commit/6d4a31028df4d7dc73fdccf8c4185b27452f5237))
 ## Other Changes
-* chore(output): ARN of the KMS encryption key used for S3 (#141) (Salim Afiune)([41d0a36](https://github.com/lacework/terraform-aws-cloudtrail/commit/41d0a36916e3a2aeb9b9a9a73502e785fbeb871d))
-* ci: version bump to v2.7.6-dev (Lacework)([3272f1e](https://github.com/lacework/terraform-aws-cloudtrail/commit/3272f1ead77b5170c71e9722692cb6bafdb64de6))
+* ci: use a session token for the ci_tests (Peter Moody)([762e155](https://github.com/lacework/terraform-aws-cloudtrail/commit/762e1555df47d72e5b815e16df55127e1029d42b))
+* ci: version bump to v2.7.7-dev (Lacework)([0eb80a3](https://github.com/lacework/terraform-aws-cloudtrail/commit/0eb80a3221a0b5bb2deb40613bf8b1b490e6ce89))
