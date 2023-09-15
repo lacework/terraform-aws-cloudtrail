@@ -5,8 +5,7 @@ provider "aws" {
 }
 
 module "aws_cloudtrail" {
-  source  = "lacework/cloudtrail/aws"
-  version = "~> 1.0"
+  source = "../../"
 
   # Use an existing CloudTrail
   use_existing_cloudtrail   = true

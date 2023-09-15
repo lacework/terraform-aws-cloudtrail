@@ -68,14 +68,14 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
     content {
       read_write_type           = "All"
       include_management_events = true
-      
+
       data_resource {
         type   = "AWS::S3::Object"
         values = ["${aws_s3_bucket.cloudtrail_bucket[0].arn}/*"]
       }
     }
   }
-  depends_on                 = [aws_s3_bucket.cloudtrail_bucket]
+  depends_on = [aws_s3_bucket.cloudtrail_bucket]
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
@@ -208,7 +208,7 @@ resource "aws_s3_bucket" "cloudtrail_log_bucket" {
 
 
 resource "aws_s3_bucket_public_access_block" "cloudtrail_log_bucket_access" {
-  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  count                   = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
   bucket                  = aws_s3_bucket.cloudtrail_log_bucket[0].id
   block_public_acls       = true
   block_public_policy     = true
@@ -227,9 +227,9 @@ resource "aws_s3_bucket_ownership_controls" "cloudtrail_log_bucket_ownership_con
 
 // v4 s3 log bucket changes
 resource "aws_s3_bucket_acl" "cloudtrail_log_bucket_acl" {
-  count      = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
-  bucket     = aws_s3_bucket.cloudtrail_log_bucket[0].id
-  acl        = "log-delivery-write"
+  count  = (var.use_existing_cloudtrail || var.use_existing_access_log_bucket) ? 0 : (var.bucket_logs_enabled ? 1 : 0)
+  bucket = aws_s3_bucket.cloudtrail_log_bucket[0].id
+  acl    = "log-delivery-write"
   depends_on = [
     aws_s3_bucket_public_access_block.cloudtrail_log_bucket_access,
     aws_s3_bucket_ownership_controls.cloudtrail_log_bucket_ownership_controls
@@ -613,7 +613,7 @@ resource "aws_iam_policy" "cross_account_policy" {
 
 module "lacework_ct_iam_role" {
   source                  = "lacework/iam-role/aws"
-  version                 = "~> 0.3"
+  version                 = "~> 0.4"
   create                  = var.use_existing_iam_role ? false : true
   iam_role_name           = local.iam_role_name
   permission_boundary_arn = var.permission_boundary_arn
