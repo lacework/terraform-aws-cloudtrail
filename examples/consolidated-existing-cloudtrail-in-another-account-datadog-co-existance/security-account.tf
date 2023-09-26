@@ -20,14 +20,13 @@ resource "aws_kms_key" "ct_key" {
 }
 
 module "aws_cloudtrail" {
-  source  = "lacework/cloudtrail/aws"
-  version = "~> 2.8"
+  source = "../../"
 
   consolidated_trail = true
 
   # Use an existing CloudTrail
-  use_existing_cloudtrail   = true
-  bucket_arn                = "arn:aws:s3:::org-ct-bucket"
+  use_existing_cloudtrail      = true
+  bucket_arn                   = "arn:aws:s3:::org-ct-bucket"
   cross_account_cloudtrail_arn = "arn:aws:cloudtrail:us-west-2:100000000000:trail/org-trail"
 
   bucket_encryption_enabled = true

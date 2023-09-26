@@ -31,7 +31,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_lacework_ct_iam_role"></a> [lacework\_ct\_iam\_role](#module\_lacework\_ct\_iam\_role) | lacework/iam-role/aws | ~> 0.3 |
+| <a name="module_lacework_ct_iam_role"></a> [lacework\_ct\_iam\_role](#module\_lacework\_ct\_iam\_role) | lacework/iam-role/aws | ~> 0.4 |
 
 ## Resources
 
@@ -93,6 +93,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | <a name="input_cross_account_policy_name"></a> [cross\_account\_policy\_name](#input\_cross\_account\_policy\_name) | n/a | `string` | `""` | no |
 | <a name="input_enable_cloudtrail_s3_management_events"></a> [enable\_cloudtrail\_s3\_management\_events](#input\_enable\_cloudtrail\_s3\_management\_events) | Enable CloudTrail Object-level logging | `bool` | `false` | no |
 | <a name="input_enable_log_file_validation"></a> [enable\_log\_file\_validation](#input\_enable\_log\_file\_validation) | Specifies whether cloudtrail log file integrity validation is enabled | `bool` | `true` | no |
+| <a name="input_external_id_length"></a> [external\_id\_length](#input\_external\_id\_length) | **Deprecated** - Will be removed on our next major release v3.0.0 | `number` | `16` | no |
 | <a name="input_iam_role_arn"></a> [iam\_role\_arn](#input\_iam\_role\_arn) | The IAM role ARN is required when setting use\_existing\_iam\_role to true | `string` | `""` | no |
 | <a name="input_iam_role_external_id"></a> [iam\_role\_external\_id](#input\_iam\_role\_external\_id) | The external ID configured inside the IAM role is required when setting use\_existing\_iam\_role to true | `string` | `""` | no |
 | <a name="input_iam_role_name"></a> [iam\_role\_name](#input\_iam\_role\_name) | The IAM role name. Required to match with iam\_role\_arn if use\_existing\_iam\_role is set to true | `string` | `""` | no |
