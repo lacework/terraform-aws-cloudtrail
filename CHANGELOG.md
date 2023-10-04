@@ -159,6 +159,11 @@
 ## Other Changes
 * ci: version bump to v1.0.3-dev (Lacework)([563e9a8](https://github.com/lacework/terraform-aws-cloudtrail/commit/563e9a8705c21870c39f20339ce45c793f39158c))
 ---
+# v1.0.3
+
+## Bug Fixes
+* fix(pin): module iam-role/aws version ~> 0.3.0
+---
 # v1.0.2
 
 ## Bug Fixes
