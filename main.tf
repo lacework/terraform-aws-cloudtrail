@@ -166,6 +166,9 @@ resource "aws_s3_bucket_versioning" "cloudtrail_bucket_versioning" {
   }
 }
 
+data "aws_organizations_organization" "organization" {
+     count = var.is_organization_trail ? 1 : 0
+}
 
 data "aws_iam_policy_document" "cloudtrail_log_policy" {
   version = "2012-10-17"
@@ -385,6 +388,27 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
       type        = "Service"
       identifiers = ["cloudtrail.amazonaws.com"]
     }
+  }
+
+
+  dynamic "statement" {
+    for_each = var.is_organization_trail ? [1] : []
+    content {
+    sid       = "AWSCloudTrailOrganizationWrite20150319"
+    actions   = ["s3:PutObject"]
+    resources = ["arn:aws:s3:::${local.bucket_name}/AWSLogs/${data.aws_organizations_organization.organization[0].id}/*"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudtrail.amazonaws.com"]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "s3:x-amz-acl"
+      values   = ["bucket-owner-full-control"]
+    }
+   }
   }
 
   statement {
