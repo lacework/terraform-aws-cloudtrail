@@ -1,8 +1,11 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.8.0`.
+Another day, another release. These are the release notes for the version `v2.8.1`.
 
-## Features
-* feat: enforce External ID v2 format via iam-role module (#144) (djmctavish)([6d4a310](https://github.com/lacework/terraform-aws-cloudtrail/commit/6d4a31028df4d7dc73fdccf8c4185b27452f5237))
+## Bug Fixes
+* fix: org cloudtrail bucket policy (#151) (Darren)([88657d0](https://github.com/lacework/terraform-aws-cloudtrail/commit/88657d0534cda921fe4653402293e1e21197464c))
+* fix: log_bucket deny policy (#150) (jonathan stewart)([984385b](https://github.com/lacework/terraform-aws-cloudtrail/commit/984385b633fb3f5be7c8ad80d709ad8aacf4fb26))
+## Documentation Updates
+* docs(readme): add terraform docs automation (#149) (Timothy MacDonald)([48f2fbf](https://github.com/lacework/terraform-aws-cloudtrail/commit/48f2fbfebb2ea5a9b4ef3f7aeae88698d41627a5))
 ## Other Changes
-* ci: use a session token for the ci_tests (Peter Moody)([762e155](https://github.com/lacework/terraform-aws-cloudtrail/commit/762e1555df47d72e5b815e16df55127e1029d42b))
-* ci: version bump to v2.7.7-dev (Lacework)([0eb80a3](https://github.com/lacework/terraform-aws-cloudtrail/commit/0eb80a3221a0b5bb2deb40613bf8b1b490e6ce89))
+* chore: update CHANGELOG with ad-hoc release (#148) (Salim Afiune)([23bf420](https://github.com/lacework/terraform-aws-cloudtrail/commit/23bf420f57a9c6f1c13dc957f794534029fa062a))
+* ci: version bump to v2.8.1-dev (Lacework)([d453292](https://github.com/lacework/terraform-aws-cloudtrail/commit/d453292f5edb61eab4da1fc49d42ddbf32c209c6))
