@@ -17,7 +17,7 @@ locals {
   sqs_source_arn    = (var.use_s3_bucket_notification && var.s3_notification_type == "SQS") ? local.bucket_arn : local.sns_topic_arn
   create_kms_key = (
     (!var.use_existing_cloudtrail ? length(var.bucket_sse_key_arn) == 0 : false)
-    || (var.®ns_topic_encryption_enabled ? length(var.sns_topic_encryption_key_arn) == 0 : false)
+    || (var.sns_topic_encryption_enabled ? length(var.sns_topic_encryption_key_arn) == 0 : false)
     || (var.sqs_encryption_enabled ? length(var.sqs_encryption_key_arn) == 0 : false)
   ) ? 1 : 0
   cross_account_policy_name = (
