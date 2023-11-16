@@ -17,7 +17,7 @@ locals {
   sqs_source_arn    = (var.use_s3_bucket_notification && var.s3_notification_type == "SQS") ? local.bucket_arn : local.sns_topic_arn
   create_kms_key = (
     (!var.use_existing_cloudtrail ? length(var.bucket_sse_key_arn) == 0 : false)
-    || (var.sns_topic_encryption_enabled ? length(var.sns_topic_encryption_key_arn) == 0 : false)
+    || (var.®ns_topic_encryption_enabled ? length(var.sns_topic_encryption_key_arn) == 0 : false)
     || (var.sqs_encryption_enabled ? length(var.sqs_encryption_key_arn) == 0 : false)
   ) ? 1 : 0
   cross_account_policy_name = (
@@ -638,7 +638,7 @@ resource "aws_iam_policy" "cross_account_policy" {
 module "lacework_ct_iam_role" {
 #  source                  = "lacework/iam-role/aws"
 #  version                 = "~> 0.4"
-  source                  = "git::https://github.com/lacework/terraform-aws-iam-role.git?ref=tmacdonald/grow-2447/use-external-IAM-role"
+  source                  = "git::https://github.com/lacework/terraform-aws-iam-role.git?ref=main"
   create                  = var.use_existing_iam_role ? false : true
   iam_role_name           = local.iam_role_name
   permission_boundary_arn = var.permission_boundary_arn
