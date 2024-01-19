@@ -14,7 +14,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.0 |
-| <a name="requirement_lacework"></a> [lacework](#requirement\_lacework) | ~> 1.0 |
+| <a name="requirement_lacework"></a> [lacework](#requirement\_lacework) | >= 1.18 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.1 |
 | <a name="requirement_time"></a> [time](#requirement\_time) | ~> 0.6 |
 
@@ -22,10 +22,10 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 
 | Name | Version |
 |------|---------|
-| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.0 |
-| <a name="provider_lacework"></a> [lacework](#provider\_lacework) | ~> 1.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | >= 2.1 |
-| <a name="provider_time"></a> [time](#provider\_time) | ~> 0.6 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | 3.71.0 |
+| <a name="provider_lacework"></a> [lacework](#provider\_lacework) | 0.3.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.1.0 |
+| <a name="provider_time"></a> [time](#provider\_time) | 0.7.2 |
 
 ## Modules
 
@@ -72,6 +72,7 @@ Terraform module for configuring an integration with Lacework and AWS for CloudT
 | [aws_iam_policy_document.sns_topic_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_organizations_organization.organization](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/organizations_organization) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
+| [lacework_metric_module.lwmetrics](https://registry.terraform.io/providers/lacework/lacework/latest/docs/data-sources/metric_module) | data source |
 
 ## Inputs
 
