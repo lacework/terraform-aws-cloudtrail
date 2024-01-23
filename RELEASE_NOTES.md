@@ -1,7 +1,6 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v2.9.0`.
+Another day, another release. These are the release notes for the version `v2.9.1`.
 
-## Features
-* feat: add lacework_metric_module datasource (#153) (Darren)([bbfe4a7](https://github.com/lacework/terraform-aws-cloudtrail/commit/bbfe4a7bab1bbe5e5f21d0dc13ce5da6d09d8868))
 ## Other Changes
-* ci: version bump to v2.8.2-dev (Lacework)([b989fcd](https://github.com/lacework/terraform-aws-cloudtrail/commit/b989fcd58040113d9c807bad9f38c24723f73bd2))
+* chore: set local var module name (#155) (Darren)([fc944bd](https://github.com/lacework/terraform-aws-cloudtrail/commit/fc944bd87c5c49166bd319fa6888d08a2157bb08))
+* ci: version bump to v2.9.1-dev (Lacework)([bcd0ae8](https://github.com/lacework/terraform-aws-cloudtrail/commit/bcd0ae868b9f334d228f053a058d62ff4c9fed7f))
