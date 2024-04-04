@@ -15,8 +15,7 @@ TEST_CASES=(
   examples/complete-cloudtrail
   examples/complete-cloudtrail-access-logs-with-object-level-logging
   examples/cloudtrail-existing-kms-key
-  #  temporarily removed due to testing workflow not providing multiple credential sets
-  #  examples/consolidated-cloudtrail-multiple-lacework-tenants  
+  examples/consolidated-cloudtrail-multiple-lacework-tenants  
   examples/consolidated-cloudtrail
   examples/existing-cloudtrail-end-to-end-encryption
   examples/existing-cloudtrail-s3-encryption
