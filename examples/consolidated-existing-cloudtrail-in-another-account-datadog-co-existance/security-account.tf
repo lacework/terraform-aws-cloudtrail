@@ -20,8 +20,7 @@ resource "aws_kms_key" "ct_key" {
 }
 
 module "aws_cloudtrail" {
-  source  = "lacework/cloudtrail/aws"
-  version = "~> 2.8"
+  source  = "../../"
 
   consolidated_trail = true
 
