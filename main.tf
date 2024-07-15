@@ -36,6 +36,7 @@ locals {
   version_file   = "${abspath(path.module)}/VERSION"
   module_name    = "terraform-aws-cloudtrail"
   module_version = fileexists(local.version_file) ? file(local.version_file) : ""
+  cloudtrail_arn = var.consolidated_trail && var.use_existing_cloudtrail && var.cross_account_cloudtrail_arn != null ? var.cross_account_cloudtrail_arn : "arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
 }
 
 resource "random_id" "uniq" {
@@ -475,11 +476,11 @@ data "aws_iam_policy_document" "sns_topic_policy" {
       effect = "Allow"
 
       dynamic "condition" {
-        for_each = !var.consolidated_trail ? [1] : []
+        for_each = (!var.consolidated_trail || var.cross_account_cloudtrail_arn != null) ? [1] : []
         content {
           test     = "StringEquals"
           variable = "AWS:SourceArn"
-          values   = ["arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"]
+          values   = [local.cloudtrail_arn]
         }
       }
 
