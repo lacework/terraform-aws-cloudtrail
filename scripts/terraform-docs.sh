@@ -11,4 +11,3 @@ else
     echo "## please install terraform-docs or docker"
     exit 1
 fi
-

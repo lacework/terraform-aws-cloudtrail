@@ -1,3 +1,27 @@
+# v2.9.1
+
+## Other Changes
+* chore: set local var module name (#155) (Darren)([fc944bd](https://github.com/lacework/terraform-aws-cloudtrail/commit/fc944bd87c5c49166bd319fa6888d08a2157bb08))
+* ci: version bump to v2.9.1-dev (Lacework)([bcd0ae8](https://github.com/lacework/terraform-aws-cloudtrail/commit/bcd0ae868b9f334d228f053a058d62ff4c9fed7f))
+---
+# v2.9.0
+
+## Features
+* feat: add lacework_metric_module datasource (#153) (Darren)([bbfe4a7](https://github.com/lacework/terraform-aws-cloudtrail/commit/bbfe4a7bab1bbe5e5f21d0dc13ce5da6d09d8868))
+## Other Changes
+* ci: version bump to v2.8.2-dev (Lacework)([b989fcd](https://github.com/lacework/terraform-aws-cloudtrail/commit/b989fcd58040113d9c807bad9f38c24723f73bd2))
+---
+# v2.8.1
+
+## Bug Fixes
+* fix: org cloudtrail bucket policy (#151) (Darren)([88657d0](https://github.com/lacework/terraform-aws-cloudtrail/commit/88657d0534cda921fe4653402293e1e21197464c))
+* fix: log_bucket deny policy (#150) (jonathan stewart)([984385b](https://github.com/lacework/terraform-aws-cloudtrail/commit/984385b633fb3f5be7c8ad80d709ad8aacf4fb26))
+## Documentation Updates
+* docs(readme): add terraform docs automation (#149) (Timothy MacDonald)([48f2fbf](https://github.com/lacework/terraform-aws-cloudtrail/commit/48f2fbfebb2ea5a9b4ef3f7aeae88698d41627a5))
+## Other Changes
+* chore: update CHANGELOG with ad-hoc release (#148) (Salim Afiune)([23bf420](https://github.com/lacework/terraform-aws-cloudtrail/commit/23bf420f57a9c6f1c13dc957f794534029fa062a))
+* ci: version bump to v2.8.1-dev (Lacework)([d453292](https://github.com/lacework/terraform-aws-cloudtrail/commit/d453292f5edb61eab4da1fc49d42ddbf32c209c6))
+---
 # v2.8.0
 
 ## Features
@@ -158,6 +182,11 @@
 * fix: aws required_provider version constraint (#74) (Salim Afiune)([ea075eb](https://github.com/lacework/terraform-aws-cloudtrail/commit/ea075eb3a0c1d2da27422cb0b9ab6301e6b4fc3a))
 ## Other Changes
 * ci: version bump to v1.0.3-dev (Lacework)([563e9a8](https://github.com/lacework/terraform-aws-cloudtrail/commit/563e9a8705c21870c39f20339ce45c793f39158c))
+---
+# v1.0.3
+
+## Bug Fixes
+* fix(pin): module iam-role/aws version ~> 0.3.0
 ---
 # v1.0.2
 
