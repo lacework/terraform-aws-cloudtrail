@@ -16,7 +16,7 @@ terraform {
     }
     lacework = {
       source  = "lacework/lacework"
-      version = ">~ 2.0"
+      version = "~> 2.0"
     }
   }
 }
