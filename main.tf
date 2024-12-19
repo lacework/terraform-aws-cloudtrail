@@ -273,7 +273,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   version = "2012-10-17"
 
   statement {
-    sid    = "Enable IAM User Permissions"
+    sid    = "EnableIAMUserPermissions"
     effect = "Allow"
 
     principals {
@@ -288,7 +288,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   dynamic "statement" {
     for_each = (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0) || var.sns_topic_encryption_enabled ? [1] : []
     content {
-      sid    = "Allow CloudTrail service to encrypt/decrypt"
+      sid    = "AllowCloudTrailServiceToEncryptDecrypt"
       effect = "Allow"
 
       principals {
@@ -304,7 +304,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   dynamic "statement" {
     for_each = var.use_s3_bucket_notification ? [1] : []
     content {
-      sid    = "Allow S3 bucket to encrypt/decrypt"
+      sid    = "AllowS3BucketToEncryptDecrypt"
       effect = "Allow"
 
       principals {
@@ -328,7 +328,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   dynamic "statement" {
     for_each = (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0) ? [1] : []
     content {
-      sid    = "Allow CloudTrail to describe key"
+      sid    = "AllowCloudTrailToDescribeKey"
       effect = "Allow"
 
       principals {
@@ -344,7 +344,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   dynamic "statement" {
     for_each = (var.sns_topic_encryption_enabled && length(var.sns_topic_encryption_key_arn) == 0) ? [1] : []
     content {
-      sid    = "Allow SNS service to encrypt/decrypt"
+      sid    = "AllowSNSServiceToEncryptDecrypt"
       effect = "Allow"
 
       principals {
@@ -358,7 +358,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   }
 
   statement {
-    sid    = "Allow principals in the account to decrypt log files"
+    sid    = "AllowPrincipalsInTheAccountToDecryptLogFiles"
     effect = "Allow"
 
     principals {
