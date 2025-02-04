@@ -61,7 +61,7 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
   is_organization_trail      = var.is_organization_trail
   s3_bucket_name             = local.bucket_name
   kms_key_id                 = local.bucket_sse_key_arn
-  sns_topic_name             = var.use_s3_bucket_notification ? null : local.sns_topic_arn
+  sns_topic_name             = var.use_s3_bucket_notification ? null : local.sns_topic_name
   tags                       = var.tags
   enable_log_file_validation = var.enable_log_file_validation
 
