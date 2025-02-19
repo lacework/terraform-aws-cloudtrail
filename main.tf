@@ -79,7 +79,10 @@ resource "aws_cloudtrail" "lacework_cloudtrail" {
       }
     }
   }
-  depends_on = [aws_s3_bucket.cloudtrail_bucket]
+  depends_on = [
+    aws_s3_bucket.cloudtrail_bucket,
+    aws_sns_topic.lacework_cloudtrail_sns_topic
+  ]
 }
 
 resource "aws_s3_bucket" "cloudtrail_bucket" {
