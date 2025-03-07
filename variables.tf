@@ -307,3 +307,9 @@ variable "cross_account_cloudtrail_arn" {
   default     = null
   description = "If using an existing CloudTrail in another account, provide the ARN here"
 }
+
+variable "additional_kms_key_policy_users" {
+  type        = list(string)
+  default     = []
+  description = "Optional list of additional IAM user ARNs to be included in the KMS key policy"
+}

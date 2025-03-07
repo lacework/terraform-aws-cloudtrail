@@ -289,6 +289,22 @@ data "aws_iam_policy_document" "kms_key_policy" {
   }
 
   dynamic "statement" {
+    for_each = var.additional_kms_key_policy_users
+    content {
+      sid    = "AllowAdditionalUser-${statement.value}"
+      effect = "Allow"
+
+      principals {
+        type        = "AWS"
+        identifiers = [statement.value]
+      }
+
+      actions   = ["kms:*"]
+      resources = ["*"]
+    }
+  }
+
+  dynamic "statement" {
     for_each = (!var.use_existing_cloudtrail && length(var.bucket_sse_key_arn) == 0) || var.sns_topic_encryption_enabled ? [1] : []
     content {
       sid    = "AllowCloudTrailServiceToEncryptDecrypt"
