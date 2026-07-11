@@ -33,7 +33,7 @@ locals {
   bucket_encryption_enabled = var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
   bucket_versioning_enabled = var.bucket_versioning_enabled ? "Enabled" : "Suspended"
   bucket_sse_key_arn        = var.use_existing_kms_key ? var.bucket_sse_key_arn : ((var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn)
-  cloudtrail_arn = var.consolidated_trail && var.use_existing_cloudtrail && var.cross_account_cloudtrail_arn != null ? var.cross_account_cloudtrail_arn : "arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
+  cloudtrail_arn = var.consolidated_trail && var.use_existing_cloudtrail && var.cross_account_cloudtrail_arn != null ? var.cross_account_cloudtrail_arn : "arn:aws:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
   version_file   = "${abspath(path.module)}/VERSION"
   module_name    = "terraform-aws-cloudtrail"
   module_version = fileexists(local.version_file) ? file(local.version_file) : ""
