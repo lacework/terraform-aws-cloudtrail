@@ -33,10 +33,10 @@ locals {
   bucket_encryption_enabled = var.bucket_encryption_enabled && length(local.bucket_sse_key_arn) > 0
   bucket_versioning_enabled = var.bucket_versioning_enabled ? "Enabled" : "Suspended"
   bucket_sse_key_arn        = var.use_existing_kms_key ? var.bucket_sse_key_arn : ((var.use_existing_cloudtrail || length(var.bucket_sse_key_arn) > 0) ? var.bucket_sse_key_arn : aws_kms_key.lacework_kms_key[0].arn)
-  cloudtrail_arn = var.consolidated_trail && var.use_existing_cloudtrail && var.cross_account_cloudtrail_arn != null ? var.cross_account_cloudtrail_arn : "arn:aws:cloudtrail:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
-  version_file   = "${abspath(path.module)}/VERSION"
-  module_name    = "terraform-aws-cloudtrail"
-  module_version = fileexists(local.version_file) ? file(local.version_file) : ""
+  cloudtrail_arn            = var.consolidated_trail && var.use_existing_cloudtrail && var.cross_account_cloudtrail_arn != null ? var.cross_account_cloudtrail_arn : "arn:aws:cloudtrail:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:trail/${var.cloudtrail_name}"
+  version_file              = "${abspath(path.module)}/VERSION"
+  module_name               = "terraform-aws-cloudtrail"
+  module_version            = fileexists(local.version_file) ? file(local.version_file) : ""
 }
 
 resource "random_id" "uniq" {
@@ -174,7 +174,7 @@ resource "aws_s3_bucket_versioning" "cloudtrail_bucket_versioning" {
 }
 
 data "aws_organizations_organization" "organization" {
-     count = var.is_organization_trail ? 1 : 0
+  count = var.is_organization_trail ? 1 : 0
 }
 
 data "aws_iam_policy_document" "cloudtrail_log_policy" {
@@ -417,21 +417,21 @@ data "aws_iam_policy_document" "cloudtrail_s3_policy" {
   dynamic "statement" {
     for_each = var.is_organization_trail ? [1] : []
     content {
-    sid       = "AWSCloudTrailOrganizationWrite20150319"
-    actions   = ["s3:PutObject"]
-    resources = ["arn:aws:s3:::${local.bucket_name}/AWSLogs/${data.aws_organizations_organization.organization[0].id}/*"]
+      sid       = "AWSCloudTrailOrganizationWrite20150319"
+      actions   = ["s3:PutObject"]
+      resources = ["arn:aws:s3:::${local.bucket_name}/AWSLogs/${data.aws_organizations_organization.organization[0].id}/*"]
 
-    principals {
-      type        = "Service"
-      identifiers = ["cloudtrail.amazonaws.com"]
-    }
+      principals {
+        type        = "Service"
+        identifiers = ["cloudtrail.amazonaws.com"]
+      }
 
-    condition {
-      test     = "StringEquals"
-      variable = "s3:x-amz-acl"
-      values   = ["bucket-owner-full-control"]
+      condition {
+        test     = "StringEquals"
+        variable = "s3:x-amz-acl"
+        values   = ["bucket-owner-full-control"]
+      }
     }
-   }
   }
 
   statement {
